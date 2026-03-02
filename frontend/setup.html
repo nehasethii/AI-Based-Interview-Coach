@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interview Setup — AI Interview Coach</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+/* ═══════════════════════════════════════════════════════════
+   SETUP PAGE — PREMIUM UI/UX DESIGN
+   ═══════════════════════════════════════════════════════════ */
+
+:root {
+  --bg-primary: #0A0E1A;
+  --bg-secondary: #151922;
+  --bg-elevated: #1C2333;
+  --gradient-primary: linear-gradient(135deg, #667EEA 0%, #764BA2 50%, #F093FB 100%);
+  --gradient-secondary: linear-gradient(135deg, #4FACFE 0%, #00F2FE 100%);
+  --gradient-accent: linear-gradient(135deg, #FA709A 0%, #FEE140 100%);
+  --gradient-success: linear-gradient(135deg, #30E8BF 0%, #FF8235 100%);
+  --accent-primary: #667EEA;
+  --accent-secondary: #4FACFE;
+  --accent-pink: #FA709A;
+  --accent-green: #30E8BF;
+  --accent-gold: #FFD93D;
+  --text-primary: #FFFFFF;
+  --text-secondary: #B8C1E0;
+  --text-muted: #6B7A99;
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Sora', sans-serif;
+  --space-xs: 8px;
+  --space-sm: 16px;
+  --space-md: 24px;
+  --space-lg: 48px;
+  --space-xl: 80px;
+  --radius-sm: 12px;
+  --radius-md: 20px;
+  --radius-lg: 32px;
+  --radius-xl: 48px;
+  --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+  font-family: var(--font-body);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Background effects */
+.bg-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+.gradient-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.5;
+  animation: float 20s ease-in-out infinite;
+}
+.orb-1 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(102, 126, 234, 0.4) 0%, transparent 70%);
+  top: -150px;
+  right: -100px;
+}
+.orb-2 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(79, 172, 254, 0.3) 0%, transparent 70%);
+  bottom: -100px;
+  left: -150px;
+}
+@keyframes float {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(30px, -30px); }
+}
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Navigation */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: rgba(10, 14, 26, 0.8);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--glass-border);
+}
+.nav-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--space-sm) var(--space-md);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.3rem;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.nav-logo-icon {
+  width: 36px;
+  height: 36px;
+  background: var(--gradient-primary);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+.nav-links {
+  display: flex;
+  gap: var(--space-md);
+  list-style: none;
+  align-items: center;
+}
+.nav-link {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  transition: all 0.3s var(--ease-out-expo);
+}
+.nav-link:hover { color: var(--text-primary); background: var(--glass-bg); }
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 16px;
+  right: 16px;
+  height: 2px;
+  background: var(--gradient-primary);
+}
+
+/* Main Container */
+.main {
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+  padding: calc(80px + var(--space-lg)) var(--space-md) var(--space-xl);
+}
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Progress Steps */
+.progress-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: var(--space-xl);
+  animation: fadeInDown 0.8s var(--ease-out-expo);
+}
+.step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.step-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--glass-bg);
+  border: 2px solid var(--glass-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  transition: all 0.4s var(--ease-out-expo);
+}
+.step.active .step-circle {
+  background: var(--gradient-primary);
+  border-color: transparent;
+  color: white;
+  box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+}
+.step.completed .step-circle {
+  background: var(--gradient-success);
+  border-color: transparent;
+  color: white;
+}
+.step-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+.step.active .step-label { color: var(--text-primary); }
+.step-line {
+  width: 60px;
+  height: 2px;
+  background: var(--glass-border);
+}
+
+/* Question Card */
+.question-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-lg);
+  backdrop-filter: blur(20px);
+  box-shadow: var(--glass-shadow);
+  margin-bottom: var(--space-md);
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 0.8s var(--ease-out-expo) 0.1s backwards;
+}
+.question-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--gradient-primary);
+}
+.question-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-md);
+}
+.question-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-secondary);
+}
+.question-category {
+  display: inline-flex;
+  padding: 6px 14px;
+  background: rgba(102, 126, 234, 0.15);
+  border: 1px solid rgba(102, 126, 234, 0.3);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--accent-primary);
+}
+.question-text {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--text-primary);
+  margin-bottom: var(--space-md);
+}
+.question-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--glass-border);
+}
+.question-tip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+.tip-icon {
+  font-size: 1.2rem;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 24px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.9rem;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition: all 0.4s var(--ease-out-expo);
+  text-decoration: none;
+}
+.btn-secondary {
+  background: var(--glass-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--glass-border);
+}
+.btn-secondary:hover {
+  background: var(--glass-border);
+  transform: translateY(-2px);
+}
+.btn-primary {
+  background: var(--gradient-primary);
+  color: white;
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+}
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(102, 126, 234, 0.6);
+}
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Microphone Card */
+.mic-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-lg);
+  backdrop-filter: blur(20px);
+  box-shadow: var(--glass-shadow);
+  margin-bottom: var(--space-md);
+  animation: fadeInUp 0.8s var(--ease-out-expo) 0.2s backwards;
+}
+.mic-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-md);
+}
+.mic-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.mic-status.checking {
+  background: rgba(79, 172, 254, 0.15);
+  border: 1px solid rgba(79, 172, 254, 0.3);
+  color: var(--accent-secondary);
+}
+.mic-status.granted {
+  background: rgba(48, 232, 191, 0.15);
+  border: 1px solid rgba(48, 232, 191, 0.3);
+  color: var(--accent-green);
+}
+.mic-status.denied {
+  background: rgba(250, 112, 154, 0.15);
+  border: 1px solid rgba(250, 112, 154, 0.3);
+  color: var(--accent-pink);
+}
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+.mic-visual {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+.mic-icon-wrap {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-md);
+  background: var(--gradient-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(79, 172, 254, 0.4);
+  transition: all 0.4s var(--ease-out-expo);
+}
+.mic-icon-wrap.granted {
+  background: var(--gradient-success);
+  animation: micPulse 2s ease-in-out infinite;
+}
+@keyframes micPulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 8px 24px rgba(48, 232, 191, 0.4); }
+  50% { transform: scale(1.05); box-shadow: 0 12px 32px rgba(48, 232, 191, 0.6); }
+}
+.mic-icon-wrap.denied {
+  background: rgba(250, 112, 154, 0.2);
+  box-shadow: none;
+}
+.audio-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 60px;
+}
+.audio-bar {
+  width: 8px;
+  background: var(--glass-border);
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+.audio-bar.active {
+  background: var(--gradient-secondary);
+  animation: barBounce 0.6s ease-in-out infinite alternate;
+}
+@keyframes barBounce {
+  0% { height: 10px; }
+  100% { height: 50px; }
+}
+.audio-bar:nth-child(1) { animation-delay: 0s; }
+.audio-bar:nth-child(2) { animation-delay: 0.1s; }
+.audio-bar:nth-child(3) { animation-delay: 0.2s; }
+.audio-bar:nth-child(4) { animation-delay: 0.3s; }
+.audio-bar:nth-child(5) { animation-delay: 0.4s; }
+.audio-bar:nth-child(6) { animation-delay: 0.5s; }
+.mic-description {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Tips Grid */
+.tips-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+  animation: fadeInUp 0.8s var(--ease-out-expo) 0.3s backwards;
+}
+.tip-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm);
+  backdrop-filter: blur(10px);
+}
+.tip-card-icon {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+}
+.tip-card-text {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* CTA Section */
+.cta-section {
+  text-align: center;
+  animation: fadeInUp 0.8s var(--ease-out-expo) 0.4s backwards;
+}
+.cta-note {
+  margin-top: var(--space-sm);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .progress-steps { overflow-x: auto; padding-bottom: 10px; }
+  .question-text { font-size: 1.3rem; }
+  .tips-grid { grid-template-columns: 1fr; }
+  .mic-visual { flex-direction: column; }
+}
+  </style>
+</head>
+<body>
+  <div class="bg-canvas">
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+  </div>
+  <div class="noise-overlay"></div>
+
+  <nav class="nav">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+          </svg>
+        </div>
+        Interview Coach
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="setup.html" class="nav-link active">Practice</a></li>
+        <li><a href="about.html" class="nav-link">About</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="main">
+    <div class="container">
+      <div class="progress-steps">
+        <div class="step active">
+          <div class="step-circle">1</div>
+          <div class="step-label">Setup</div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step">
+          <div class="step-circle">2</div>
+          <div class="step-label">Record</div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step">
+          <div class="step-circle">3</div>
+          <div class="step-label">Analyse</div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step">
+          <div class="step-circle">4</div>
+          <div class="step-label">Feedback</div>
+        </div>
+      </div>
+
+      <div class="question-card">
+        <div class="question-header">
+          <div class="question-label">Interview Question</div>
+          <div class="question-category" id="questionCategory">Behavioural</div>
+        </div>
+        <div class="question-text" id="questionText">Tell me about yourself and your background.</div>
+        <div class="question-footer">
+          <div class="question-tip">
+            <span class="tip-icon">💡</span>
+            <span>Use the STAR method for best results</span>
+          </div>
+          <button class="btn btn-secondary" id="btnNewQuestion">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="1 4 1 10 7 10"/>
+              <path d="M3.51 15a9 9 0 1 0 .49-4.08"/>
+            </svg>
+            New Question
+          </button>
+        </div>
+      </div>
+
+      <div class="mic-card">
+        <div class="mic-header">
+          <div class="question-label">Microphone Access</div>
+          <div class="mic-status checking" id="micStatus">
+            <span class="status-dot"></span>
+            <span id="micStatusText">Checking…</span>
+          </div>
+        </div>
+        <div class="mic-visual">
+          <div class="mic-icon-wrap" id="micIcon">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+              <line x1="12" y1="19" x2="12" y2="23"/>
+              <line x1="8" y1="23" x2="16" y2="23"/>
+            </svg>
+          </div>
+          <div class="audio-bars" id="audioBars">
+            <div class="audio-bar" style="height:10px"></div>
+            <div class="audio-bar" style="height:10px"></div>
+            <div class="audio-bar" style="height:10px"></div>
+            <div class="audio-bar" style="height:10px"></div>
+            <div class="audio-bar" style="height:10px"></div>
+            <div class="audio-bar" style="height:10px"></div>
+          </div>
+        </div>
+        <p class="mic-description" id="micDesc">Requesting microphone access to analyse your spoken response in real-time…</p>
+      </div>
+
+      <div class="tips-grid">
+        <div class="tip-card">
+          <div class="tip-card-icon">🔇</div>
+          <div class="tip-card-text">Find a quiet environment with minimal background noise</div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-card-icon">🎯</div>
+          <div class="tip-card-text">Take a moment to structure your thoughts before recording</div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-card-icon">⏱️</div>
+          <div class="tip-card-text">Aim for 45–90 seconds — comprehensive but concise</div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-card-icon">💬</div>
+          <div class="tip-card-text">Speak clearly at a natural, confident pace</div>
+        </div>
+      </div>
+
+      <div class="cta-section">
+        <button class="btn btn-primary" id="btnStart" disabled>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/>
+          </svg>
+          Start Recording
+        </button>
+        <p class="cta-note" id="ctaNote">Waiting for microphone access…</p>
+      </div>
+    </div>
+  </main>
+
+  <script>
+const AppState={_s:{},set(k,v){this._s[k]=v;try{sessionStorage.setItem('aic_'+k,JSON.stringify(v));}catch(e){}},get(k,f=null){if(this._s[k]!==undefined)return this._s[k];try{const r=sessionStorage.getItem('aic_'+k);if(r!==null){this._s[k]=JSON.parse(r);return this._s[k];}}catch(e){}return f;}};
+const QUESTIONS=[{id:1,category:'Behavioural',text:'Tell me about yourself and your background.'},{id:2,category:'Behavioural',text:'Describe a challenging project you worked on and how you handled it.'},{id:3,category:'Behavioural',text:'How do you handle tight deadlines and pressure at work?'},{id:7,category:'Situational',text:'Where do you see yourself in five years?'},{id:8,category:'Situational',text:'How would you explain a technical concept to a non-technical stakeholder?'},{id:9,category:'Behavioural',text:'Describe a time when you had to work with a difficult team member.'},{id:11,category:'Situational',text:'If you discovered a critical bug right before a product launch, what would you do?'},{id:12,category:'Behavioural',text:'Tell me about a time you showed leadership without a formal title.'}];
+function getRandomQ(excId){const pool=excId?QUESTIONS.filter(q=>q.id!==excId):QUESTIONS;return pool[Math.floor(Math.random()*pool.length)];}
+
+(function(){
+  let currentQ=AppState.get('currentQuestion')||getRandomQ();
+  AppState.set('currentQuestion',currentQ);
+  document.getElementById('questionText').textContent=currentQ.text;
+  document.getElementById('questionCategory').textContent=currentQ.category;
+
+  document.getElementById('btnNewQuestion').addEventListener('click',()=>{
+    const newQ=getRandomQ(currentQ.id);
+    currentQ=newQ;
+    AppState.set('currentQuestion',newQ);
+    const qText=document.getElementById('questionText');
+    qText.style.opacity='0';
+    setTimeout(()=>{
+      qText.textContent=newQ.text;
+      document.getElementById('questionCategory').textContent=newQ.category;
+      qText.style.opacity='1';
+    },200);
+  });
+
+  async function requestMic(){
+    const status=document.getElementById('micStatus');
+    const statusText=document.getElementById('micStatusText');
+    const icon=document.getElementById('micIcon');
+    const desc=document.getElementById('micDesc');
+    const bars=document.querySelectorAll('.audio-bar');
+    const btn=document.getElementById('btnStart');
+    const note=document.getElementById('ctaNote');
+
+    if(!navigator.mediaDevices){
+      status.className='mic-status denied';
+      statusText.textContent='Not Supported';
+      icon.classList.add('denied');
+      desc.textContent='Your browser does not support microphone access.';
+      return;
+    }
+
+    try{
+      await navigator.mediaDevices.getUserMedia({audio:true});
+      status.className='mic-status granted';
+      statusText.textContent='Access Granted';
+      icon.classList.add('granted');
+      desc.textContent='Microphone is ready! Click Start Recording when you\'re prepared to answer.';
+      bars.forEach(b=>b.classList.add('active'));
+      btn.disabled=false;
+      note.textContent='Ready to begin your interview practice';
+      AppState.set('micGranted',true);
+    }catch(err){
+      status.className='mic-status denied';
+      statusText.textContent='Access Denied';
+      icon.classList.add('denied');
+      desc.textContent='Please allow microphone access in your browser settings and reload.';
+    }
+  }
+
+  document.getElementById('btnStart').addEventListener('click',()=>{
+    window.location.href='recording.html';
+  });
+
+  requestMic();
+})();
+  </script>
+</body>
+</html>

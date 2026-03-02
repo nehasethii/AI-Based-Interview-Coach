@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — AI Interview Coach</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+:root {
+  --bg-primary: #0A0E1A;
+  --gradient-primary: linear-gradient(135deg, #667EEA 0%, #764BA2 50%, #F093FB 100%);
+  --gradient-secondary: linear-gradient(135deg, #4FACFE 0%, #00F2FE 100%);
+  --accent-primary: #667EEA;
+  --accent-secondary: #4FACFE;
+  --accent-green: #30E8BF;
+  --text-primary: #FFFFFF;
+  --text-secondary: #B8C1E0;
+  --text-muted: #6B7A99;
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Sora', sans-serif;
+  --space-sm: 16px;
+  --space-md: 24px;
+  --space-lg: 48px;
+  --radius-md: 20px;
+  --radius-lg: 32px;
+  --radius-xl: 48px;
+  --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{font-size:16px;scroll-behavior:smooth;}
+body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-primary);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+.bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
+.gradient-orb{position:absolute;border-radius:50%;filter:blur(120px);opacity:0.3;animation:float 20s ease-in-out infinite;}
+.orb-1{width:600px;height:600px;background:radial-gradient(circle, rgba(102, 126, 234, 0.4) 0%, transparent 70%);top:-200px;right:-100px;}
+.orb-2{width:500px;height:500px;background:radial-gradient(circle, rgba(79, 172, 254, 0.3) 0%, transparent 70%);bottom:-150px;left:-100px;}
+@keyframes float{0%,100%{transform:translate(0, 0);}50%{transform:translate(30px, -30px);}}
+.noise-overlay{position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:1;}
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(10, 14, 26, 0.8);backdrop-filter:blur(20px);border-bottom:1px solid var(--glass-border);}
+.nav-container{max-width:1400px;margin:0 auto;padding:var(--space-sm) var(--space-md);display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{display:flex;align-items:center;gap:12px;text-decoration:none;font-family:var(--font-display);font-weight:700;font-size:1.3rem;background:var(--gradient-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.nav-logo-icon{width:36px;height:36px;background:var(--gradient-primary);border-radius:10px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(102, 126, 234, 0.3);}
+.nav-links{display:flex;gap:var(--space-md);list-style:none;align-items:center;}
+.nav-link{color:var(--text-secondary);text-decoration:none;font-weight:500;font-size:0.95rem;padding:8px 16px;border-radius:12px;transition:all 0.3s var(--ease-out-expo);position:relative;}
+.nav-link:hover{color:var(--text-primary);background:var(--glass-bg);}
+.nav-link.active::after{content:'';position:absolute;bottom:0;left:16px;right:16px;height:2px;background:var(--gradient-primary);}
+.nav-cta{padding:12px 28px;background:var(--gradient-primary);color:white;font-weight:600;border-radius:12px;box-shadow:0 4px 16px rgba(102, 126, 234, 0.4);transition:all 0.3s var(--ease-out-expo);}
+.nav-cta:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(102, 126, 234, 0.6);}
+
+.main{position:relative;z-index:2;min-height:100vh;padding:calc(80px + var(--space-lg)) var(--space-md) var(--space-lg);}
+.container{max-width:1000px;margin:0 auto;}
+
+.hero{text-align:center;margin-bottom:var(--space-lg);animation:fadeIn 0.8s var(--ease-out-expo);}
+.hero-badge{display:inline-flex;padding:8px 20px;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:999px;font-size:0.85rem;font-weight:600;color:var(--accent-secondary);margin-bottom:var(--space-md);}
+.hero-title{font-family:var(--font-display);font-size:clamp(2.5rem, 6vw, 4rem);font-weight:700;line-height:1.1;margin-bottom:var(--space-md);}
+.hero-title-gradient{background:var(--gradient-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-desc{font-size:1.2rem;color:var(--text-secondary);max-width:700px;margin:0 auto var(--space-md);line-height:1.7;}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:16px 32px;font-family:var(--font-body);font-weight:600;font-size:1rem;border-radius:var(--radius-md);border:none;cursor:pointer;transition:all 0.4s var(--ease-out-expo);text-decoration:none;}
+.btn-primary{background:var(--gradient-primary);color:white;box-shadow:0 8px 24px rgba(102, 126, 234, 0.4);}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(102, 126, 234, 0.6);}
+
+.section{margin-bottom:var(--space-lg);animation:fadeIn 0.8s var(--ease-out-expo);}
+.section-card{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius-xl);padding:var(--space-lg);backdrop-filter:blur(20px);box-shadow:var(--glass-shadow);}
+.section-label{font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent-secondary);margin-bottom:var(--space-md);}
+.pipeline{display:grid;grid-template-columns:repeat(4, 1fr);gap:var(--space-sm);}
+.pipeline-step{background:rgba(0, 0, 0, 0.2);border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:var(--space-md);text-align:center;transition:all 0.3s var(--ease-out-expo);}
+.pipeline-step:hover{border-color:var(--accent-primary);transform:translateY(-4px);}
+.pipeline-num{font-size:0.7rem;font-weight:700;color:var(--accent-primary);margin-bottom:8px;}
+.pipeline-icon{font-size:2rem;margin-bottom:var(--space-sm);}
+.pipeline-title{font-family:var(--font-display);font-size:1rem;font-weight:600;color:var(--text-primary);margin-bottom:8px;}
+.pipeline-desc{font-size:0.8rem;color:var(--text-secondary);line-height:1.5;}
+
+.tech-grid{display:grid;grid-template-columns:repeat(3, 1fr);gap:var(--space-sm);}
+.tech-card{background:rgba(0, 0, 0, 0.2);border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:var(--space-md);transition:all 0.3s var(--ease-out-expo);}
+.tech-card:hover{border-color:var(--accent-secondary);transform:translateY(-4px);}
+.tech-badge{display:inline-block;padding:4px 12px;background:rgba(79, 172, 254, 0.15);border-radius:999px;font-size:0.7rem;font-weight:700;color:var(--accent-secondary);margin-bottom:8px;}
+.tech-name{font-family:var(--font-display);font-size:1rem;font-weight:600;color:var(--text-primary);margin-bottom:6px;}
+.tech-desc{font-size:0.8rem;color:var(--text-muted);}
+
+.privacy-card{background:rgba(48, 232, 191, 0.05);border:1px solid rgba(48, 232, 191, 0.2);border-radius:var(--radius-xl);padding:var(--space-lg);display:flex;gap:var(--space-md);align-items:flex-start;}
+.privacy-icon{font-size:2.5rem;flex-shrink:0;}
+.privacy-content h3{font-family:var(--font-display);font-size:1.5rem;font-weight:700;margin-bottom:var(--space-sm);}
+.privacy-content p{font-size:1rem;color:var(--text-secondary);line-height:1.7;margin-bottom:var(--space-sm);}
+.privacy-badges{display:flex;flex-wrap:wrap;gap:8px;}
+.privacy-badge{padding:6px 14px;background:rgba(48, 232, 191, 0.15);border:1px solid rgba(48, 232, 191, 0.3);border-radius:999px;font-size:0.75rem;font-weight:600;color:var(--accent-green);}
+
+.team-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-md);}
+.team-card{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius-lg);padding:var(--space-lg);backdrop-filter:blur(20px);}
+.team-members{display:flex;flex-direction:column;gap:var(--space-sm);margin-bottom:var(--space-md);}
+.member{display:flex;align-items:center;gap:var(--space-sm);}
+.member-avatar{width:50px;height:50px;border-radius:50%;background:var(--gradient-primary);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:1.2rem;font-weight:700;flex-shrink:0;}
+.member-info{}
+.member-name{font-weight:600;color:var(--text-primary);font-size:0.95rem;}
+.member-roll{font-size:0.75rem;color:var(--text-muted);}
+.member-role{font-size:0.8rem;color:var(--text-secondary);}
+.supervisor{padding-top:var(--space-sm);border-top:1px solid var(--glass-border);}
+.supervisor-name{font-weight:600;color:var(--text-primary);margin-bottom:4px;}
+.supervisor-title{font-size:0.8rem;color:var(--text-muted);}
+
+.sdg-list{display:flex;flex-direction:column;gap:var(--space-sm);}
+.sdg-item{display:flex;gap:var(--space-sm);align-items:flex-start;}
+.sdg-num{width:48px;height:48px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:1.3rem;font-weight:700;color:white;flex-shrink:0;}
+.sdg-4{background:#e5243b;}.sdg-8{background:#a21942;}.sdg-9{background:#fd6925;}
+.sdg-content{}
+.sdg-name{font-weight:600;color:var(--text-primary);margin-bottom:4px;}
+.sdg-desc{font-size:0.85rem;color:var(--text-secondary);line-height:1.5;}
+
+.footer{text-align:center;padding:var(--space-lg) 0;border-top:1px solid var(--glass-border);font-size:0.85rem;color:var(--text-muted);}
+.footer strong{color:var(--text-secondary);font-weight:600;}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+@media(max-width:768px){.nav-links{display:none;}.pipeline{grid-template-columns:1fr;}.tech-grid{grid-template-columns:1fr;}.team-grid{grid-template-columns:1fr;}.privacy-card{flex-direction:column;}}
+  </style>
+</head>
+<body>
+  <div class="bg-canvas">
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+  </div>
+  <div class="noise-overlay"></div>
+
+  <nav class="nav">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+          </svg>
+        </div>
+        Interview Coach
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="setup.html" class="nav-link">Practice</a></li>
+        <li><a href="about.html" class="nav-link active">About</a></li>
+        <li><a href="setup.html" class="nav-cta">Start Now →</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="main">
+    <div class="container">
+      <div class="hero">
+        <div class="hero-badge">B.Tech IT Project · PIET, Panipat · 2026</div>
+        <h1 class="hero-title">
+          <span class="hero-title-gradient">AI-Based</span><br>Interview Coach
+        </h1>
+        <p class="hero-desc">An edge-AI system that evaluates spoken interview responses and delivers instant, personalised feedback — entirely offline, with zero data stored.</p>
+        <a href="setup.html" class="btn btn-primary">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="5 3 19 12 5 21 5 3"/>
+          </svg>
+          Start Practising
+        </a>
+      </div>
+
+      <div class="section">
+        <div class="section-card">
+          <div class="section-label">How It Works</div>
+          <div class="pipeline">
+            <div class="pipeline-step">
+              <div class="pipeline-num">STEP 01</div>
+              <div class="pipeline-icon">🎙️</div>
+              <div class="pipeline-title">Audio Capture</div>
+              <div class="pipeline-desc">Record your response locally via microphone</div>
+            </div>
+            <div class="pipeline-step">
+              <div class="pipeline-num">STEP 02</div>
+              <div class="pipeline-icon">✍️</div>
+              <div class="pipeline-title">Speech-to-Text</div>
+              <div class="pipeline-desc">OpenAI Whisper converts audio offline</div>
+            </div>
+            <div class="pipeline-step">
+              <div class="pipeline-num">STEP 03</div>
+              <div class="pipeline-icon">🧠</div>
+              <div class="pipeline-title">NLP Analysis</div>
+              <div class="pipeline-desc">DistilBERT & Sentence-BERT evaluate quality</div>
+            </div>
+            <div class="pipeline-step">
+              <div class="pipeline-num">STEP 04</div>
+              <div class="pipeline-icon">📊</div>
+              <div class="pipeline-title">Feedback</div>
+              <div class="pipeline-desc">Generate structured insights & scores</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-card">
+          <div class="section-label">Tech Stack</div>
+          <div class="tech-grid">
+            <div class="tech-card">
+              <div class="tech-badge">Speech</div>
+              <div class="tech-name">OpenAI Whisper</div>
+              <div class="tech-desc">Offline speech-to-text</div>
+            </div>
+            <div class="tech-card">
+              <div class="tech-badge">NLP</div>
+              <div class="tech-name">DistilBERT</div>
+              <div class="tech-desc">Grammar & sentiment</div>
+            </div>
+            <div class="tech-card">
+              <div class="tech-badge">NLP</div>
+              <div class="tech-name">Sentence-BERT</div>
+              <div class="tech-desc">Semantic similarity</div>
+            </div>
+            <div class="tech-card">
+              <div class="tech-badge">Backend</div>
+              <div class="tech-name">Python / Flask</div>
+              <div class="tech-desc">API & processing</div>
+            </div>
+            <div class="tech-card">
+              <div class="tech-badge">Audio</div>
+              <div class="tech-name">PyAudio / Librosa</div>
+              <div class="tech-desc">Feature extraction</div>
+            </div>
+            <div class="tech-card">
+              <div class="tech-badge">Frontend</div>
+              <div class="tech-name">HTML · CSS · JS</div>
+              <div class="tech-desc">This interface</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="privacy-card">
+          <div class="privacy-icon">🔒</div>
+          <div class="privacy-content">
+            <h3>Privacy & Offline Operation</h3>
+            <p>This system runs entirely on your local machine. Your voice recordings, transcripts, and scores are <strong>never uploaded, stored, or transmitted</strong> to any external server. Each session is ephemeral — all data clears when you close your browser.</p>
+            <div class="privacy-badges">
+              <div class="privacy-badge">✓ 100% Offline</div>
+              <div class="privacy-badge">✓ No Data Storage</div>
+              <div class="privacy-badge">✓ No Cloud Dependency</div>
+              <div class="privacy-badge">✓ No Account Needed</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="team-grid">
+          <div class="team-card">
+            <div class="section-label">Team</div>
+            <div class="team-members">
+              <div class="member">
+                <div class="member-avatar">N</div>
+                <div class="member-info">
+                  <div class="member-name">Neha <span class="member-roll">(2822633)</span></div>
+                  <div class="member-role">NLP & Confidence Analysis</div>
+                </div>
+              </div>
+              <div class="member">
+                <div class="member-avatar">K</div>
+                <div class="member-info">
+                  <div class="member-name">Kapil Saini <span class="member-roll">(2822656)</span></div>
+                  <div class="member-role">Backend & Pipeline Integration</div>
+                </div>
+              </div>
+              <div class="member">
+                <div class="member-avatar">R</div>
+                <div class="member-info">
+                  <div class="member-name">Ronak <span class="member-roll">(2822646)</span></div>
+                  <div class="member-role">Frontend Interface</div>
+                </div>
+              </div>
+            </div>
+            <div class="supervisor">
+              <div class="section-label" style="margin-bottom:8px;">Supervisor</div>
+              <div class="supervisor-name">Dr. Sorabh Gupta</div>
+              <div class="supervisor-title">Assistant Professor, IT — PIET, Panipat</div>
+            </div>
+          </div>
+
+          <div class="team-card">
+            <div class="section-label">SDG Alignment</div>
+            <div class="sdg-list">
+              <div class="sdg-item">
+                <div class="sdg-num sdg-4">4</div>
+                <div class="sdg-content">
+                  <div class="sdg-name">Quality Education</div>
+                  <div class="sdg-desc">Supports interview prep and skill development for students.</div>
+                </div>
+              </div>
+              <div class="sdg-item">
+                <div class="sdg-num sdg-8">8</div>
+                <div class="sdg-content">
+                  <div class="sdg-name">Decent Work & Economic Growth</div>
+                  <div class="sdg-desc">Improves employability and career readiness.</div>
+                </div>
+              </div>
+              <div class="sdg-item">
+                <div class="sdg-num sdg-9">9</div>
+                <div class="sdg-content">
+                  <div class="sdg-name">Industry, Innovation & Infrastructure</div>
+                  <div class="sdg-desc">Edge-AI deployment without cloud infrastructure.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <p>Built by <strong>Neha · Kapil Saini · Ronak</strong> &nbsp;|&nbsp; Supervised by Dr. Sorabh Gupta &nbsp;|&nbsp; PIET, Panipat · 2026</p>
+    </footer>
+  </main>
+</body>
+</html>

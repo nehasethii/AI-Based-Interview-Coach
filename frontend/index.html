@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Interview Coach — Master Your Voice</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+/* ═══════════════════════════════════════════════════════════
+   AI INTERVIEW COACH — PREMIUM UI/UX REDESIGN
+   Award-Winning Interface by World-Class Designer
+   ═══════════════════════════════════════════════════════════ */
+
+:root {
+  /* Premium Color Palette — Inspired by audio production software */
+  --bg-primary: #0A0E1A;
+  --bg-secondary: #151922;
+  --bg-elevated: #1C2333;
+  
+  /* Signature gradient — The "Interview Confidence" gradient */
+  --gradient-primary: linear-gradient(135deg, #667EEA 0%, #764BA2 50%, #F093FB 100%);
+  --gradient-secondary: linear-gradient(135deg, #4FACFE 0%, #00F2FE 100%);
+  --gradient-accent: linear-gradient(135deg, #FA709A 0%, #FEE140 100%);
+  --gradient-success: linear-gradient(135deg, #30E8BF 0%, #FF8235 100%);
+  
+  /* Accent colors */
+  --accent-primary: #667EEA;
+  --accent-secondary: #4FACFE;
+  --accent-pink: #FA709A;
+  --accent-green: #30E8BF;
+  --accent-gold: #FFD93D;
+  
+  /* Neutrals with warmth */
+  --text-primary: #FFFFFF;
+  --text-secondary: #B8C1E0;
+  --text-muted: #6B7A99;
+  
+  /* Glass morphism */
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  
+  /* Typography */
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Sora', sans-serif;
+  
+  /* Spacing system */
+  --space-xs: 8px;
+  --space-sm: 16px;
+  --space-md: 24px;
+  --space-lg: 48px;
+  --space-xl: 80px;
+  
+  /* Border radius system */
+  --radius-sm: 12px;
+  --radius-md: 20px;
+  --radius-lg: 32px;
+  --radius-xl: 48px;
+  
+  /* Animation timing */
+  --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+  --ease-in-out-circ: cubic-bezier(0.785, 0.135, 0.15, 0.86);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ═══ BACKGROUND EFFECTS ═══ */
+.bg-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Animated gradient mesh */
+.gradient-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.6;
+  animation: float 20s ease-in-out infinite;
+}
+
+.orb-1 {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(102, 126, 234, 0.4) 0%, transparent 70%);
+  top: -200px;
+  right: -100px;
+  animation-delay: 0s;
+}
+
+.orb-2 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(79, 172, 254, 0.3) 0%, transparent 70%);
+  bottom: -150px;
+  left: -100px;
+  animation-delay: 5s;
+}
+
+.orb-3 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(250, 112, 154, 0.25) 0%, transparent 70%);
+  top: 40%;
+  left: 50%;
+  animation-delay: 10s;
+}
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(30px, -30px) scale(1.05); }
+  50% { transform: translate(-20px, 20px) scale(0.95); }
+  75% { transform: translate(20px, 10px) scale(1.02); }
+}
+
+/* Noise texture overlay */
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1;
+  mix-blend-mode: overlay;
+}
+
+/* Grid pattern */
+.grid-pattern {
+  position: fixed;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(102, 126, 234, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(102, 126, 234, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ═══ NAVIGATION ═══ */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: rgba(10, 14, 26, 0.8);
+  backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.nav-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--space-sm) var(--space-md);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.3rem;
+  letter-spacing: -0.02em;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  transition: transform 0.3s var(--ease-out-expo);
+}
+
+.nav-logo:hover {
+  transform: scale(1.05);
+}
+
+.nav-logo-icon {
+  width: 36px;
+  height: 36px;
+  background: var(--gradient-primary);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.nav-links {
+  display: flex;
+  gap: var(--space-md);
+  list-style: none;
+  align-items: center;
+}
+
+.nav-link {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  transition: all 0.3s var(--ease-out-expo);
+  position: relative;
+}
+
+.nav-link:hover {
+  color: var(--text-primary);
+  background: var(--glass-bg);
+}
+
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 16px;
+  right: 16px;
+  height: 2px;
+  background: var(--gradient-primary);
+  border-radius: 2px;
+}
+
+.nav-cta {
+  padding: 12px 28px;
+  background: var(--gradient-primary);
+  color: white;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+  transition: all 0.3s var(--ease-out-expo);
+}
+
+.nav-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.6);
+}
+
+/* ═══ HERO SECTION ═══ */
+.hero {
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: calc(80px + var(--space-lg)) var(--space-md) var(--space-xl);
+}
+
+.hero-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-xl);
+  align-items: center;
+}
+
+.hero-content {
+  animation: fadeInUp 1s var(--ease-out-expo) backwards;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent-secondary);
+  margin-bottom: var(--space-md);
+  backdrop-filter: blur(10px);
+  animation: fadeInUp 1s var(--ease-out-expo) 0.1s backwards;
+}
+
+.badge-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--accent-secondary);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--accent-secondary);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 7vw, 5rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin-bottom: var(--space-md);
+  animation: fadeInUp 1s var(--ease-out-expo) 0.2s backwards;
+}
+
+.hero-title-gradient {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: inline-block;
+}
+
+.hero-description {
+  font-size: 1.25rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-lg);
+  max-width: 540px;
+  animation: fadeInUp 1s var(--ease-out-expo) 0.3s backwards;
+}
+
+.hero-cta-group {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-lg);
+  animation: fadeInUp 1s var(--ease-out-expo) 0.4s backwards;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 36px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition: all 0.4s var(--ease-out-expo);
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(-100%);
+  transition: transform 0.5s var(--ease-out-expo);
+}
+
+.btn:hover::before {
+  transform: translateX(0);
+}
+
+.btn-primary {
+  background: var(--gradient-primary);
+  color: white;
+  box-shadow: 0 8px 32px rgba(102, 126, 234, 0.4);
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 48px rgba(102, 126, 234, 0.6);
+}
+
+.btn-secondary {
+  background: var(--glass-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(10px);
+}
+
+.btn-secondary:hover {
+  background: var(--glass-border);
+  border-color: var(--accent-primary);
+}
+
+.hero-stats {
+  display: flex;
+  gap: var(--space-lg);
+  animation: fadeInUp 1s var(--ease-out-expo) 0.5s backwards;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-number {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* ═══ HERO VISUAL ═══ */
+.hero-visual {
+  position: relative;
+  animation: fadeInRight 1.2s var(--ease-out-expo) 0.3s backwards;
+}
+
+.visual-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-lg);
+  backdrop-filter: blur(20px) saturate(180%);
+  box-shadow: var(--glass-shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.visual-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--gradient-primary);
+  opacity: 0.05;
+  pointer-events: none;
+}
+
+.visual-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-md);
+}
+
+.visual-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.status-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: rgba(48, 232, 191, 0.15);
+  border: 1px solid rgba(48, 232, 191, 0.3);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--accent-green);
+}
+
+.waveform-container {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  margin-bottom: var(--space-md);
+  position: relative;
+  overflow: hidden;
+}
+
+.waveform-canvas {
+  width: 100%;
+  height: 120px;
+  display: block;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.metric-item {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm);
+}
+
+.metric-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.metric-value {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  background: var(--gradient-success);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.visual-insight {
+  background: var(--gradient-primary);
+  padding: var(--space-sm);
+  border-radius: var(--radius-md);
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* Floating elements */
+.float-element {
+  position: absolute;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  padding: 10px 16px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  animation: floatAnim 4s ease-in-out infinite;
+  white-space: nowrap;
+}
+
+.float-1 {
+  top: -20px;
+  left: -40px;
+  animation-delay: 0s;
+  color: var(--accent-secondary);
+}
+
+.float-2 {
+  top: 40%;
+  right: -50px;
+  animation-delay: 1.5s;
+  color: var(--accent-pink);
+}
+
+.float-3 {
+  bottom: -20px;
+  left: 20%;
+  animation-delay: 3s;
+  color: var(--accent-green);
+}
+
+@keyframes floatAnim {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ═══ RESPONSIVE ═══ */
+@media (max-width: 1024px) {
+  .hero-container {
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+  }
+  
+  .hero-visual {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .float-element {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+  }
+  
+  .hero {
+    padding: calc(80px + var(--space-md)) var(--space-sm) var(--space-md);
+  }
+  
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  
+  .hero-description {
+    font-size: 1.05rem;
+  }
+  
+  .hero-stats {
+    flex-wrap: wrap;
+    gap: var(--space-md);
+  }
+  
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+}
+  </style>
+</head>
+<body>
+  <!-- Background Effects -->
+  <div class="bg-canvas">
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+    <div class="gradient-orb orb-3"></div>
+  </div>
+  <div class="noise-overlay"></div>
+  <div class="grid-pattern"></div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+          </svg>
+        </div>
+        Interview Coach
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link active">Home</a></li>
+        <li><a href="setup.html" class="nav-link">Practice</a></li>
+        <li><a href="about.html" class="nav-link">About</a></li>
+        <li><a href="setup.html" class="nav-cta">Start Now →</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-container">
+      <!-- Left: Content -->
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="badge-dot"></span>
+          AI-Powered · Privacy-First · 100% Offline
+        </div>
+
+        <h1 class="hero-title">
+          Master Your<br>
+          <span class="hero-title-gradient">Interview Voice</span>
+        </h1>
+
+        <p class="hero-description">
+          Transform your interview performance with real-time AI feedback. Practice speaking confidently, get instant analysis, and land your dream job — all completely private and offline.
+        </p>
+
+        <div class="hero-cta-group">
+          <a href="setup.html" class="btn btn-primary">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/>
+            </svg>
+            Start Free Practice
+          </a>
+          <a href="about.html" class="btn btn-secondary">
+            How It Works
+          </a>
+        </div>
+
+        <div class="hero-stats">
+          <div class="stat">
+            <div class="stat-number">4+</div>
+            <div class="stat-label">Analysis Dimensions</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">8+</div>
+            <div class="stat-label">Practice Questions</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">100%</div>
+            <div class="stat-label">Privacy Protected</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Interactive Visual -->
+      <div class="hero-visual">
+        <div class="visual-card">
+          <div class="visual-header">
+            <div class="visual-title">Live Analysis Preview</div>
+            <div class="status-badge">
+              <span class="badge-dot"></span>
+              Active
+            </div>
+          </div>
+
+          <div class="waveform-container">
+            <canvas id="heroWaveform" class="waveform-canvas" width="500" height="120"></canvas>
+          </div>
+
+          <div class="metrics-grid">
+            <div class="metric-item">
+              <div class="metric-label">Confidence</div>
+              <div class="metric-value">87</div>
+            </div>
+            <div class="metric-item">
+              <div class="metric-label">Fluency</div>
+              <div class="metric-value">92</div>
+            </div>
+            <div class="metric-item">
+              <div class="metric-label">Grammar</div>
+              <div class="metric-value">95</div>
+            </div>
+            <div class="metric-item">
+              <div class="metric-label">Relevance</div>
+              <div class="metric-value">88</div>
+            </div>
+          </div>
+
+          <div class="visual-insight">
+            💎 Strong delivery with excellent pacing
+          </div>
+        </div>
+
+        <!-- Floating badges -->
+        <div class="float-element float-1">🎯 Speech-to-Text</div>
+        <div class="float-element float-2">🧠 NLP Analysis</div>
+        <div class="float-element float-3">✨ Edge AI</div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+/* ═══ SHARED STATE ═══ */
+const AppState = {
+  _s: {},
+  set(k, v) {
+    this._s[k] = v;
+    try { sessionStorage.setItem('aic_' + k, JSON.stringify(v)); } catch (e) {}
+  },
+  get(k, f = null) {
+    if (this._s[k] !== undefined) return this._s[k];
+    try {
+      const r = sessionStorage.getItem('aic_' + k);
+      if (r !== null) {
+        this._s[k] = JSON.parse(r);
+        return this._s[k];
+      }
+    } catch (e) {}
+    return f;
+  }
+};
+
+/* ═══ HERO WAVEFORM ANIMATION ═══ */
+(function() {
+  const canvas = document.getElementById('heroWaveform');
+  if (!canvas) return;
+  
+  const ctx = canvas.getContext('2d');
+  const width = canvas.width;
+  const height = canvas.height;
+  
+  let phase = 0;
+  
+  function drawWave() {
+    ctx.clearRect(0, 0, width, height);
+    
+    // Create gradient for waveform
+    const gradient = ctx.createLinearGradient(0, 0, width, 0);
+    gradient.addColorStop(0, '#667EEA');
+    gradient.addColorStop(0.5, '#764BA2');
+    gradient.addColorStop(1, '#F093FB');
+    
+    // Draw multiple layered waves
+    const waves = [
+      { amplitude: 25, frequency: 0.015, speed: 0.03, opacity: 0.8 },
+      { amplitude: 15, frequency: 0.025, speed: 0.05, opacity: 0.5 },
+      { amplitude: 10, frequency: 0.04, speed: 0.07, opacity: 0.3 }
+    ];
+    
+    waves.forEach((wave, index) => {
+      ctx.beginPath();
+      ctx.strokeStyle = gradient;
+      ctx.lineWidth = 3;
+      ctx.globalAlpha = wave.opacity;
+      ctx.shadowBlur = 15;
+      ctx.shadowColor = '#667EEA';
+      
+      for (let x = 0; x <= width; x += 2) {
+        const y = height / 2 + Math.sin(x * wave.frequency + phase * wave.speed * 30) * wave.amplitude;
+        
+        if (x === 0) {
+          ctx.moveTo(x, y);
+        } else {
+          ctx.lineTo(x, y);
+        }
+      }
+      
+      ctx.stroke();
+    });
+    
+    // Reset shadow
+    ctx.shadowBlur = 0;
+    ctx.globalAlpha = 1;
+    
+    // Draw center line
+    ctx.beginPath();
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+    ctx.lineWidth = 1;
+    ctx.moveTo(0, height / 2);
+    ctx.lineTo(width, height / 2);
+    ctx.stroke();
+    
+    phase += 0.02;
+    requestAnimationFrame(drawWave);
+  }
+  
+  drawWave();
+})();
+  </script>
+</body>
+</html>

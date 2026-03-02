@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Analysing — AI Interview Coach</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+:root {
+  --bg-primary: #0A0E1A;
+  --bg-secondary: #151922;
+  --gradient-primary: linear-gradient(135deg, #667EEA 0%, #764BA2 50%, #F093FB 100%);
+  --gradient-accent: linear-gradient(135deg, #FA709A 0%, #FEE140 100%);
+  --gradient-success: linear-gradient(135deg, #30E8BF 0%, #FF8235 100%);
+  --accent-primary: #667EEA;
+  --accent-gold: #FFD93D;
+  --accent-green: #30E8BF;
+  --text-primary: #FFFFFF;
+  --text-secondary: #B8C1E0;
+  --text-muted: #6B7A99;
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Sora', sans-serif;
+  --space-sm: 16px;
+  --space-md: 24px;
+  --space-lg: 48px;
+  --space-xl: 80px;
+  --radius-md: 20px;
+  --radius-lg: 32px;
+  --radius-xl: 48px;
+  --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{font-size:16px;scroll-behavior:smooth;}
+body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-primary);line-height:1.6;-webkit-font-smoothing:antialiased;position:relative;overflow-x:hidden;}
+.bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
+.gradient-orb{position:absolute;border-radius:50%;filter:blur(120px);opacity:0.4;animation:float 20s ease-in-out infinite;}
+.orb-1{width:600px;height:600px;background:radial-gradient(circle, rgba(255, 217, 61, 0.4) 0%, transparent 70%);top:-200px;right:-100px;}
+.orb-2{width:500px;height:500px;background:radial-gradient(circle, rgba(102, 126, 234, 0.3) 0%, transparent 70%);bottom:-150px;left:-100px;}
+@keyframes float{0%,100%{transform:translate(0, 0);}50%{transform:translate(30px, -30px);}}
+.noise-overlay{position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:1;}
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(10, 14, 26, 0.8);backdrop-filter:blur(20px);border-bottom:1px solid var(--glass-border);}
+.nav-container{max-width:1400px;margin:0 auto;padding:var(--space-sm) var(--space-md);display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{display:flex;align-items:center;gap:12px;text-decoration:none;font-family:var(--font-display);font-weight:700;font-size:1.3rem;background:var(--gradient-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.nav-logo-icon{width:36px;height:36px;background:var(--gradient-primary);border-radius:10px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(102, 126, 234, 0.3);}
+.proc-badge{display:flex;align-items:center;gap:8px;padding:8px 20px;background:rgba(255, 217, 61, 0.15);border:1px solid rgba(255, 217, 61, 0.3);border-radius:999px;font-size:0.85rem;font-weight:600;color:var(--accent-gold);}
+.proc-dot{width:12px;height:12px;border-radius:50%;background:var(--accent-gold);box-shadow:0 0 15px var(--accent-gold);animation:spin 1s linear infinite;}
+@keyframes spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
+
+.main{position:relative;z-index:2;min-height:100vh;padding:calc(80px + var(--space-lg)) var(--space-md) var(--space-xl);display:flex;align-items:center;justify-content:center;}
+.container{max-width:700px;width:100%;}
+
+.progress-steps{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:var(--space-xl);}
+.step{display:flex;align-items:center;gap:8px;}
+.step-circle{width:40px;height:40px;border-radius:50%;background:var(--glass-bg);border:2px solid var(--glass-border);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:700;font-size:0.9rem;color:var(--text-muted);}
+.step.active .step-circle{background:var(--gradient-accent);border-color:transparent;color:white;box-shadow:0 0 20px rgba(255, 217, 61, 0.6);}
+.step.completed .step-circle{background:var(--gradient-success);border-color:transparent;color:white;}
+.step-label{font-size:0.85rem;font-weight:600;color:var(--text-muted);}
+.step.active .step-label{color:var(--text-primary);}
+.step-line{width:60px;height:2px;background:var(--glass-border);}
+
+.analysis-hub{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius-xl);padding:var(--space-xl) var(--space-lg);backdrop-filter:blur(20px);box-shadow:var(--glass-shadow);position:relative;overflow:hidden;animation:fadeIn 0.8s var(--ease-out-expo);}
+.analysis-hub::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--gradient-accent);}
+
+.orbit-container{width:160px;height:160px;margin:0 auto var(--space-lg);position:relative;display:flex;align-items:center;justify-content:center;}
+.orbit-ring{position:absolute;border-radius:50%;border:3px solid transparent;animation:orbitSpin linear infinite;}
+.ring-1{width:100%;height:100%;border-top-color:var(--accent-primary);border-right-color:rgba(102, 126, 234, 0.2);animation-duration:3s;box-shadow:inset 0 0 30px rgba(102, 126, 234, 0.1);}
+.ring-2{width:75%;height:75%;border-bottom-color:var(--accent-gold);border-left-color:rgba(255, 217, 61, 0.2);animation-duration:2s;animation-direction:reverse;}
+.ring-3{width:50%;height:50%;border-top-color:rgba(48, 232, 191, 0.6);animation-duration:4s;}
+@keyframes orbitSpin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+.orbit-core{width:60px;height:60px;border-radius:50%;background:var(--gradient-accent);display:flex;align-items:center;justify-content:center;box-shadow:0 0 30px rgba(255, 217, 61, 0.4);animation:coreGlow 2s ease-in-out infinite;}
+@keyframes coreGlow{0%,100%{box-shadow:0 0 30px rgba(255, 217, 61, 0.4);}50%{box-shadow:0 0 50px rgba(255, 217, 61, 0.8);}}
+
+.analysis-title{font-family:var(--font-display);font-size:2rem;font-weight:700;text-align:center;margin-bottom:12px;}
+.analysis-subtitle{font-size:0.95rem;color:var(--text-secondary);text-align:center;margin-bottom:var(--space-lg);}
+
+.process-list{display:flex;flex-direction:column;gap:var(--space-sm);margin-bottom:var(--space-lg);}
+.process-item{display:flex;align-items:center;gap:var(--space-sm);padding:var(--space-sm);background:rgba(0, 0, 0, 0.2);border-radius:var(--radius-md);transition:all 0.4s var(--ease-out-expo);}
+.process-item.running{background:rgba(255, 217, 61, 0.1);border:1px solid rgba(255, 217, 61, 0.3);}
+.process-item.done{background:rgba(48, 232, 191, 0.1);border:1px solid rgba(48, 232, 191, 0.3);}
+.process-icon{width:36px;height:36px;border-radius:50%;background:var(--glass-bg);border:2px solid var(--glass-border);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.process-item.running .process-icon{background:rgba(255, 217, 61, 0.2);border-color:var(--accent-gold);animation:iconPulse 1s ease-in-out infinite;}
+.process-item.done .process-icon{background:rgba(48, 232, 191, 0.2);border-color:var(--accent-green);}
+@keyframes iconPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.1);}}
+.process-content{flex:1;}
+.process-name{font-size:0.9rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;}
+.process-desc{font-size:0.75rem;color:var(--text-muted);}
+.process-status{font-size:0.75rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;}
+.process-item.running .process-status{color:var(--accent-gold);}
+.process-item.done .process-status{color:var(--accent-green);}
+
+.progress-bar-wrap{margin-bottom:var(--space-sm);}
+.progress-bar{height:6px;background:rgba(255, 255, 255, 0.1);border-radius:999px;overflow:hidden;}
+.progress-fill{height:100%;width:0%;background:var(--gradient-accent);border-radius:999px;transition:width 0.4s ease;box-shadow:0 0 10px rgba(255, 217, 61, 0.5);}
+.progress-text{font-size:0.8rem;color:var(--text-muted);text-align:center;}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+@media(max-width:768px){.orbit-container{width:120px;height:120px;}}
+  </style>
+</head>
+<body>
+  <div class="bg-canvas">
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+  </div>
+  <div class="noise-overlay"></div>
+
+  <nav class="nav">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+          </svg>
+        </div>
+        Interview Coach
+      </a>
+      <div class="proc-badge">
+        <span class="proc-dot"></span>
+        Processing
+      </div>
+    </div>
+  </nav>
+
+  <main class="main">
+    <div class="container">
+      <div class="progress-steps">
+        <div class="step completed">
+          <div class="step-circle">✓</div>
+          <div class="step-label">Setup</div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step completed">
+          <div class="step-circle">✓</div>
+          <div class="step-label">Record</div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step active">
+          <div class="step-circle">3</div>
+          <div class="step-label">Analyse</div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step">
+          <div class="step-circle">4</div>
+          <div class="step-label">Feedback</div>
+        </div>
+      </div>
+
+      <div class="analysis-hub">
+        <div class="orbit-container">
+          <div class="orbit-ring ring-1"></div>
+          <div class="orbit-ring ring-2"></div>
+          <div class="orbit-ring ring-3"></div>
+          <div class="orbit-core">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+              <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+            </svg>
+          </div>
+        </div>
+
+        <h2 class="analysis-title">Analysing Your Response</h2>
+        <p class="analysis-subtitle">AI models are processing your audio and generating insights…</p>
+
+        <div class="process-list">
+          <div class="process-item" id="item1">
+            <div class="process-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            </div>
+            <div class="process-content">
+              <div class="process-name">Speech-to-Text Transcription</div>
+              <div class="process-desc">Converting audio using OpenAI Whisper</div>
+            </div>
+            <div class="process-status" id="status1">Waiting</div>
+          </div>
+
+          <div class="process-item" id="item2">
+            <div class="process-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            </div>
+            <div class="process-content">
+              <div class="process-name">Audio Feature Extraction</div>
+              <div class="process-desc">Analysing pace, pauses, and pitch</div>
+            </div>
+            <div class="process-status" id="status2">Waiting</div>
+          </div>
+
+          <div class="process-item" id="item3">
+            <div class="process-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            </div>
+            <div class="process-content">
+              <div class="process-name">NLP Grammar & Sentiment</div>
+              <div class="process-desc">Evaluating structure and tone</div>
+            </div>
+            <div class="process-status" id="status3">Waiting</div>
+          </div>
+
+          <div class="process-item" id="item4">
+            <div class="process-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            </div>
+            <div class="process-content">
+              <div class="process-name">Answer Relevance Scoring</div>
+              <div class="process-desc">Measuring semantic similarity</div>
+            </div>
+            <div class="process-status" id="status4">Waiting</div>
+          </div>
+
+          <div class="process-item" id="item5">
+            <div class="process-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            </div>
+            <div class="process-content">
+              <div class="process-name">Confidence Estimation</div>
+              <div class="process-desc">Rule-based explainable scoring</div>
+            </div>
+            <div class="process-status" id="status5">Waiting</div>
+          </div>
+        </div>
+
+        <div class="progress-bar-wrap">
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+        </div>
+        <p class="progress-text" id="progressText">0% complete</p>
+      </div>
+    </div>
+  </main>
+
+  <script>
+const AppState={_s:{},set(k,v){this._s[k]=v;try{sessionStorage.setItem('aic_'+k,JSON.stringify(v));}catch(e){}},get(k,f=null){if(this._s[k]!==undefined)return this._s[k];try{const r=sessionStorage.getItem('aic_'+k);if(r!==null){this._s[k]=JSON.parse(r);return this._s[k];}}catch(e){}return f;}};
+
+function simulateAnalysis(d){
+  const rand=(a,b)=>Math.round(a+Math.random()*(b-a));
+  const c=rand(42,92),f=rand(40,95),g=rand(50,98),re=rand(35,90),o=Math.round((c+f+g+re)/4);
+  const s=[c>70?'You projected a confident and assertive tone throughout your response.':null,f>70?'Your speech was fluid with minimal filler words and natural pauses.':null,g>80?'Your grammar and sentence structure were consistently strong.':null,re>65?'Your answer stayed clearly on-topic and addressed the question directly.':null,d>40?'You provided a thorough and detailed response.':null].filter(Boolean).slice(0,3);
+  const i=[c<60?'Work on speaking with more conviction — reduce hedging phrases.':null,f<60?'Practice reducing filler words (um, uh, like) and vary your pace.':null,g<70?'Focus on subject-verb agreement and sentence completeness.':null,re<60?'Structure answers using the STAR method to stay on track.':null,d<20?'Aim for more complete answers — ideal responses are 45–90 seconds.':null,d>120?'Try to be more concise — keep answers under 90 seconds.':null].filter(Boolean).slice(0,3);
+  if(s.length===0)s.push('You completed the response — keep practising!');
+  if(i.length===0)i.push('Excellent response overall!');
+  const t=['Um, so I\'ve been working in technology for about three years now, and my experience with backend development has really shaped how I approach problems.','I would say one of my strongest skills is problem-solving. When I encounter a difficult challenge, I break it down systematically.','My background is in information technology, and I have experience with machine learning and natural language processing.','I\'ve worked on several projects involving data analysis and software development. I believe in clean code and thorough documentation.'];
+  return{confidence:c,fluency:f,grammar:g,relevance:re,overall:o,strengths:s,improvements:i,transcript:t[Math.floor(Math.random()*t.length)],durationSec:d};
+}
+
+(function(){
+  const steps=[{id:1,dur:1800},{id:2,dur:1400},{id:3,dur:2000},{id:4,dur:1600},{id:5,dur:1200}];
+  let cur=0;
+
+  function setState(id,state){
+    const item=document.getElementById('item'+id);
+    const status=document.getElementById('status'+id);
+    item.classList.remove('running','done');
+    if(state===1){item.classList.add('running');status.textContent='Running…';}
+    else if(state===2){item.classList.add('done');status.textContent='Done ✓';}
+  }
+
+  function updateProg(pct){
+    document.getElementById('progressFill').style.width=pct+'%';
+    document.getElementById('progressText').textContent=pct+'% complete';
+  }
+
+  function runNext(){
+    if(cur>=steps.length){finish();return;}
+    const s=steps[cur];
+    setState(s.id,1);
+    const start=(cur/steps.length)*100;
+    const end=((cur+1)/steps.length)*100;
+    const startTime=Date.now();
+    const tick=setInterval(()=>{
+      const frac=Math.min((Date.now()-startTime)/s.dur,1);
+      updateProg(Math.round(start+frac*(end-start)));
+      if(frac>=1){clearInterval(tick);setState(s.id,2);cur++;setTimeout(runNext,250);}
+    },50);
+  }
+
+  function finish(){
+    updateProg(100);
+    const dur=AppState.get('recordingDuration',45);
+    AppState.set('analysisResults',simulateAnalysis(dur));
+    setTimeout(()=>{window.location.href='feedback.html';},600);
+  }
+
+  setTimeout(runNext,400);
+})();
+  </script>
+</body>
+</html>

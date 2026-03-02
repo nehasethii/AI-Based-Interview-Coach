@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Results — AI Interview Coach</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+:root {
+  --bg-primary: #0A0E1A;
+  --gradient-primary: linear-gradient(135deg, #667EEA 0%, #764BA2 50%, #F093FB 100%);
+  --gradient-success: linear-gradient(135deg, #30E8BF 0%, #FF8235 100%);
+  --gradient-warning: linear-gradient(135deg, #FA709A 0%, #FEE140 100%);
+  --accent-green: #30E8BF;
+  --accent-gold: #FFD93D;
+  --accent-pink: #FA709A;
+  --text-primary: #FFFFFF;
+  --text-secondary: #B8C1E0;
+  --text-muted: #6B7A99;
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Sora', sans-serif;
+  --space-sm: 16px;
+  --space-md: 24px;
+  --space-lg: 48px;
+  --radius-md: 20px;
+  --radius-lg: 32px;
+  --radius-xl: 48px;
+  --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{font-size:16px;scroll-behavior:smooth;}
+body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-primary);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+.bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
+.gradient-orb{position:absolute;border-radius:50%;filter:blur(120px);opacity:0.3;animation:float 20s ease-in-out infinite;}
+.orb-1{width:600px;height:600px;background:radial-gradient(circle, rgba(48, 232, 191, 0.4) 0%, transparent 70%);top:-200px;right:-100px;}
+.orb-2{width:500px;height:500px;background:radial-gradient(circle, rgba(102, 126, 234, 0.3) 0%, transparent 70%);bottom:-150px;left:-100px;}
+@keyframes float{0%,100%{transform:translate(0, 0);}50%{transform:translate(30px, -30px);}}
+.noise-overlay{position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:1;}
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(10, 14, 26, 0.8);backdrop-filter:blur(20px);border-bottom:1px solid var(--glass-border);}
+.nav-container{max-width:1400px;margin:0 auto;padding:var(--space-sm) var(--space-md);display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{display:flex;align-items:center;gap:12px;text-decoration:none;font-family:var(--font-display);font-weight:700;font-size:1.3rem;background:var(--gradient-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.nav-logo-icon{width:36px;height:36px;background:var(--gradient-primary);border-radius:10px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(102, 126, 234, 0.3);}
+.ready-badge{display:flex;align-items:center;gap:8px;padding:8px 20px;background:rgba(48, 232, 191, 0.15);border:1px solid rgba(48, 232, 191, 0.3);border-radius:999px;font-size:0.85rem;font-weight:600;color:var(--accent-green);}
+
+.main{position:relative;z-index:2;min-height:100vh;padding:calc(80px + var(--space-lg)) var(--space-md) var(--space-lg);}
+.container{max-width:1000px;margin:0 auto;}
+
+.progress-steps{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:var(--space-lg);}
+.step{display:flex;align-items:center;gap:8px;}
+.step-circle{width:40px;height:40px;border-radius:50%;background:var(--glass-bg);border:2px solid var(--glass-border);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:700;font-size:0.9rem;color:var(--text-muted);}
+.step.active .step-circle{background:var(--gradient-success);border-color:transparent;color:white;box-shadow:0 0 20px rgba(48, 232, 191, 0.6);}
+.step.completed .step-circle{background:var(--gradient-success);border-color:transparent;color:white;}
+.step-label{font-size:0.85rem;font-weight:600;color:var(--text-muted);}
+.step.active .step-label{color:var(--text-primary);}
+.step-line{width:60px;height:2px;background:var(--glass-border);}
+
+.hero-card{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius-xl);padding:var(--space-lg);backdrop-filter:blur(20px);box-shadow:var(--glass-shadow);margin-bottom:var(--space-md);display:grid;grid-template-columns:auto 1fr;gap:var(--space-lg);align-items:center;animation:fadeIn 0.8s var(--ease-out-expo);}
+.hero-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--gradient-success);}
+.hero-score-visual{position:relative;width:180px;height:180px;}
+.hero-score-ring{position:absolute;inset:0;}
+.hero-score-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.hero-score-num{font-family:var(--font-display);font-size:3.5rem;font-weight:700;line-height:1;background:var(--gradient-success);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-score-label{font-size:0.8rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;margin-top:6px;}
+.hero-content{}
+.hero-question-label{font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent-green);margin-bottom:8px;}
+.hero-question-text{font-family:var(--font-display);font-size:1.3rem;font-weight:600;color:var(--text-primary);margin-bottom:var(--space-sm);}
+.hero-meta{display:flex;gap:var(--space-sm);align-items:center;flex-wrap:wrap;}
+.meta-badge{padding:6px 14px;background:rgba(102, 126, 234, 0.15);border:1px solid rgba(102, 126, 234, 0.3);border-radius:999px;font-size:0.75rem;font-weight:600;color:var(--accent-green);}
+.meta-time{font-size:0.8rem;color:var(--text-muted);}
+
+.metrics-grid{display:grid;grid-template-columns:repeat(4, 1fr);gap:var(--space-sm);margin-bottom:var(--space-md);animation:fadeIn 0.8s var(--ease-out-expo) 0.1s backwards;}
+.metric-card{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius-lg);padding:var(--space-md);backdrop-filter:blur(10px);text-align:center;transition:all 0.4s var(--ease-out-expo);}
+.metric-card:hover{border-color:var(--glass-border);transform:translateY(-4px);box-shadow:0 12px 32px rgba(0, 0, 0, 0.3);}
+.metric-ring{width:100px;height:100px;margin:0 auto var(--space-sm);}
+.metric-name{font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;}
+.metric-value{font-family:var(--font-display);font-size:2rem;font-weight:700;line-height:1;margin-bottom:4px;}
+.metric-label{font-size:0.7rem;color:var(--text-muted);margin-bottom:var(--space-sm);}
+.metric-desc{font-size:0.75rem;color:var(--text-secondary);line-height:1.4;}
+
+.transcript-card{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius-lg);padding:var(--space-lg);backdrop-filter:blur(20px);margin-bottom:var(--space-md);animation:fadeIn 0.8s var(--ease-out-expo) 0.2s backwards;}
+.transcript-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-sm);}
+.transcript-label{font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent-green);}
+.transcript-text{font-size:0.95rem;line-height:1.8;color:var(--text-secondary);border-left:3px solid rgba(48, 232, 191, 0.3);padding-left:var(--space-sm);}
+
+.feedback-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-sm);margin-bottom:var(--space-md);animation:fadeIn 0.8s var(--ease-out-expo) 0.3s backwards;}
+.feedback-card{border-radius:var(--radius-lg);padding:var(--space-md);border:1px solid;}
+.feedback-strengths{background:rgba(48, 232, 191, 0.05);border-color:rgba(48, 232, 191, 0.2);}
+.feedback-improvements{background:rgba(255, 217, 61, 0.05);border-color:rgba(255, 217, 61, 0.2);}
+.feedback-header{display:flex;align-items:center;gap:10px;margin-bottom:var(--space-sm);}
+.feedback-icon{font-size:1.3rem;}
+.feedback-title{font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;}
+.feedback-strengths .feedback-title{color:var(--accent-green);}
+.feedback-improvements .feedback-title{color:var(--accent-gold);}
+.feedback-list{list-style:none;display:flex;flex-direction:column;gap:var(--space-sm);}
+.feedback-list li{font-size:0.85rem;color:var(--text-secondary);line-height:1.5;padding-left:var(--space-sm);position:relative;}
+.feedback-list li::before{content:'•';position:absolute;left:0;font-weight:700;}
+
+.actions{display:flex;gap:var(--space-sm);justify-content:center;flex-wrap:wrap;animation:fadeIn 0.8s var(--ease-out-expo) 0.4s backwards;}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 28px;font-family:var(--font-body);font-weight:600;font-size:0.9rem;border-radius:var(--radius-md);border:none;cursor:pointer;transition:all 0.4s var(--ease-out-expo);text-decoration:none;}
+.btn-primary{background:var(--gradient-primary);color:white;box-shadow:0 8px 24px rgba(102, 126, 234, 0.4);}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(102, 126, 234, 0.6);}
+.btn-secondary{background:var(--glass-bg);color:var(--text-primary);border:1px solid var(--glass-border);}
+.btn-secondary:hover{background:var(--glass-border);transform:translateY(-2px);}
+.btn-accent{background:var(--gradient-warning);color:white;box-shadow:0 8px 24px rgba(255, 217, 61, 0.4);}
+.btn-accent:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(255, 217, 61, 0.6);}
+
+.privacy-note{text-align:center;font-size:0.8rem;color:var(--text-muted);margin-top:var(--space-md);animation:fadeIn 0.8s var(--ease-out-expo) 0.5s backwards;}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+@media(max-width:768px){.hero-card{grid-template-columns:1fr;text-align:center;}.metrics-grid{grid-template-columns:1fr 1fr;}.feedback-grid{grid-template-columns:1fr;}.actions{flex-direction:column;align-items:stretch;}}
+  </style>
+</head>
+<body>
+  <div class="bg-canvas">
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+  </div>
+  <div class="noise-overlay"></div>
+
+  <nav class="nav">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+          </svg>
+        </div>
+        Interview Coach
+      </a>
+      <div class="ready-badge">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        Results Ready
+      </div>
+    </div>
+  </nav>
+
+  <main class="main">
+    <div class="container">
+      <div class="progress-steps">
+        <div class="step completed"><div class="step-circle">✓</div><div class="step-label">Setup</div></div>
+        <div class="step-line"></div>
+        <div class="step completed"><div class="step-circle">✓</div><div class="step-label">Record</div></div>
+        <div class="step-line"></div>
+        <div class="step completed"><div class="step-circle">✓</div><div class="step-label">Analyse</div></div>
+        <div class="step-line"></div>
+        <div class="step active"><div class="step-circle">4</div><div class="step-label">Feedback</div></div>
+      </div>
+
+      <div class="hero-card" style="position:relative;">
+        <div class="hero-score-visual">
+          <div class="hero-score-ring" id="heroRing"></div>
+          <div class="hero-score-center">
+            <div class="hero-score-num" id="heroNum">0</div>
+            <div class="hero-score-label" id="heroLabel">—</div>
+          </div>
+        </div>
+        <div class="hero-content">
+          <div class="hero-question-label">Question Asked</div>
+          <div class="hero-question-text" id="questionText">Loading…</div>
+          <div class="hero-meta">
+            <div class="meta-badge" id="categoryBadge">—</div>
+            <div class="meta-time">⏱️ <span id="duration">—</span> response</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-ring" id="ring1"></div>
+          <div class="metric-name">Confidence</div>
+          <div class="metric-value" id="val1">0</div>
+          <div class="metric-label" id="lbl1">—</div>
+          <div class="metric-desc">Pitch stability & assertive phrasing</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-ring" id="ring2"></div>
+          <div class="metric-name">Fluency</div>
+          <div class="metric-value" id="val2">0</div>
+          <div class="metric-label" id="lbl2">—</div>
+          <div class="metric-desc">Pauses & speech continuity</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-ring" id="ring3"></div>
+          <div class="metric-name">Grammar</div>
+          <div class="metric-value" id="val3">0</div>
+          <div class="metric-label" id="lbl3">—</div>
+          <div class="metric-desc">Structure & correctness</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-ring" id="ring4"></div>
+          <div class="metric-name">Relevance</div>
+          <div class="metric-value" id="val4">0</div>
+          <div class="metric-label" id="lbl4">—</div>
+          <div class="metric-desc">Semantic similarity</div>
+        </div>
+      </div>
+
+      <div class="transcript-card">
+        <div class="transcript-header">
+          <div class="transcript-label">Transcript</div>
+          <div class="meta-badge">Auto-generated</div>
+        </div>
+        <div class="transcript-text" id="transcript">Loading transcript…</div>
+      </div>
+
+      <div class="feedback-grid">
+        <div class="feedback-card feedback-strengths">
+          <div class="feedback-header">
+            <div class="feedback-icon">✅</div>
+            <div class="feedback-title">Strengths</div>
+          </div>
+          <ul class="feedback-list" id="strengthsList"></ul>
+        </div>
+        <div class="feedback-card feedback-improvements">
+          <div class="feedback-header">
+            <div class="feedback-icon">🎯</div>
+            <div class="feedback-title">Areas to Improve</div>
+          </div>
+          <ul class="feedback-list" id="improvementsList"></ul>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-secondary" id="btnAgain">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="1 4 1 10 7 10"/>
+            <path d="M3.51 15a9 9 0 1 0 .49-4.08"/>
+          </svg>
+          Practice Again
+        </button>
+        <button class="btn btn-accent" id="btnNew">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="5 3 19 12 5 21 5 3"/>
+          </svg>
+          New Question
+        </button>
+        <a href="index.html" class="btn btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          </svg>
+          Home
+        </a>
+      </div>
+
+      <p class="privacy-note">
+        🔒 Your recording and data are not stored and will be cleared when you close this session.
+      </p>
+    </div>
+  </main>
+
+  <script>
+const AppState={_s:{},set(k,v){this._s[k]=v;try{sessionStorage.setItem('aic_'+k,JSON.stringify(v));}catch(e){}},get(k,f=null){if(this._s[k]!==undefined)return this._s[k];try{const r=sessionStorage.getItem('aic_'+k);if(r!==null){this._s[k]=JSON.parse(r);return this._s[k];}}catch(e){}return f;}};
+const QUESTIONS=[{id:1,category:'Behavioural',text:'Tell me about yourself and your background.'},{id:2,category:'Behavioural',text:'Describe a challenging project you worked on and how you handled it.'},{id:3,category:'Behavioural',text:'How do you handle tight deadlines and pressure at work?'},{id:7,category:'Situational',text:'Where do you see yourself in five years?'},{id:8,category:'Situational',text:'How would you explain a technical concept to a non-technical stakeholder?'},{id:9,category:'Behavioural',text:'Describe a time when you had to work with a difficult team member.'},{id:11,category:'Situational',text:'If you discovered a critical bug right before a product launch, what would you do?'},{id:12,category:'Behavioural',text:'Tell me about a time you showed leadership without a formal title.'}];
+function getRandomQ(excId){const pool=excId?QUESTIONS.filter(q=>q.id!==excId):QUESTIONS;return pool[Math.floor(Math.random()*pool.length)];}
+function scoreColor(s){return s>=75?'#30E8BF':s>=50?'#FFD93D':'#FA709A';}
+function scoreLabel(s){return s>=80?'Excellent':s>=65?'Good':s>=50?'Fair':'Needs Work';}
+function formatTime(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');}
+function animateCounter(el,target,dur=1200){const start=performance.now();function u(now){const p=Math.min((now-start)/dur,1),e=1-Math.pow(1-p,3);el.textContent=Math.round(e*target);if(p<1)requestAnimationFrame(u);}requestAnimationFrame(u);}
+function buildCircle(container,score,color,size=100){const r=(size-12)/2,c=2*Math.PI*r,o=c-(score/100)*c;const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('width',size);svg.setAttribute('height',size);const track=document.createElementNS('http://www.w3.org/2000/svg','circle');track.setAttribute('cx',size/2);track.setAttribute('cy',size/2);track.setAttribute('r',r);track.setAttribute('fill','none');track.setAttribute('stroke','rgba(255,255,255,0.05)');track.setAttribute('stroke-width','6');const arc=document.createElementNS('http://www.w3.org/2000/svg','circle');arc.setAttribute('cx',size/2);arc.setAttribute('cy',size/2);arc.setAttribute('r',r);arc.setAttribute('fill','none');arc.setAttribute('stroke',color);arc.setAttribute('stroke-width','6');arc.setAttribute('stroke-linecap','round');arc.setAttribute('stroke-dasharray',c);arc.setAttribute('stroke-dashoffset',c);arc.setAttribute('transform',`rotate(-90 ${size/2} ${size/2})`);arc.style.transition='stroke-dashoffset 1.5s cubic-bezier(0.4,0,0.2,1)';arc.style.filter=`drop-shadow(0 0 8px ${color})`;svg.appendChild(track);svg.appendChild(arc);container.appendChild(svg);setTimeout(()=>{arc.setAttribute('stroke-dashoffset',o);},100);}
+
+function simulateAnalysis(d){const rand=(a,b)=>Math.round(a+Math.random()*(b-a));const c=rand(42,92),f=rand(40,95),g=rand(50,98),re=rand(35,90),o=Math.round((c+f+g+re)/4);const s=[c>70?'You projected a confident and assertive tone throughout your response.':null,f>70?'Your speech was fluid with minimal filler words and natural pauses.':null,g>80?'Your grammar and sentence structure were consistently strong.':null,re>65?'Your answer stayed clearly on-topic and addressed the question directly.':null,d>40?'You provided a thorough and detailed response.':null].filter(Boolean).slice(0,3);const i=[c<60?'Work on speaking with more conviction — reduce hedging phrases.':null,f<60?'Practice reducing filler words and vary your pace.':null,g<70?'Focus on subject-verb agreement and sentence completeness.':null,re<60?'Structure answers using the STAR method.':null,d<20?'Aim for more complete answers (45–90 seconds ideal).':null,d>120?'Try to be more concise — keep under 90 seconds.':null].filter(Boolean).slice(0,3);if(s.length===0)s.push('You completed the response — keep practising!');if(i.length===0)i.push('Excellent response overall!');const t=['Um, so I\'ve been working in technology for about three years now, and my experience with backend development has really shaped how I approach problems.','I would say one of my strongest skills is problem-solving. When I encounter a difficult challenge, I break it down systematically.','My background is in information technology, and I have experience with machine learning and natural language processing.','I\'ve worked on several projects involving data analysis and software development. I believe in clean code and documentation.'];return{confidence:c,fluency:f,grammar:g,relevance:re,overall:o,strengths:s,improvements:i,transcript:t[Math.floor(Math.random()*t.length)],durationSec:d};}
+
+(function(){
+  let r=AppState.get('analysisResults');
+  const q=AppState.get('currentQuestion')||QUESTIONS[0];
+  if(!r)r=simulateAnalysis(AppState.get('recordingDuration',45));
+
+  buildCircle(document.getElementById('heroRing'),r.overall,scoreColor(r.overall),180);
+  animateCounter(document.getElementById('heroNum'),r.overall,1000);
+  document.getElementById('heroLabel').textContent=scoreLabel(r.overall);
+  document.getElementById('heroNum').style.color=scoreColor(r.overall);
+
+  document.getElementById('questionText').textContent=q.text;
+  document.getElementById('categoryBadge').textContent=q.category;
+  document.getElementById('duration').textContent=formatTime(r.durationSec);
+
+  [{id:1,val:r.confidence},{id:2,val:r.fluency},{id:3,val:r.grammar},{id:4,val:r.relevance}].forEach(m=>{
+    const color=scoreColor(m.val);
+    buildCircle(document.getElementById('ring'+m.id),m.val,color,100);
+    const valEl=document.getElementById('val'+m.id);
+    animateCounter(valEl,m.val,1200);
+    valEl.style.color=color;
+    document.getElementById('lbl'+m.id).textContent=scoreLabel(m.val);
+  });
+
+  document.getElementById('transcript').textContent=r.transcript;
+  r.strengths.forEach(s=>{const li=document.createElement('li');li.textContent=s;document.getElementById('strengthsList').appendChild(li);});
+  r.improvements.forEach(s=>{const li=document.createElement('li');li.textContent=s;document.getElementById('improvementsList').appendChild(li);});
+
+  document.getElementById('btnAgain').addEventListener('click',()=>{window.location.href='setup.html';});
+  document.getElementById('btnNew').addEventListener('click',()=>{AppState.set('currentQuestion',getRandomQ(q.id));window.location.href='setup.html';});
+})();
+  </script>
+</body>
+</html>

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Recording — AI Interview Coach</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+:root {
+  --bg-primary: #0A0E1A;
+  --bg-secondary: #151922;
+  --gradient-primary: linear-gradient(135deg, #667EEA 0%, #764BA2 50%, #F093FB 100%);
+  --gradient-danger: linear-gradient(135deg, #FA709A 0%, #FEE140 100%);
+  --accent-pink: #FA709A;
+  --accent-red: #FF4757;
+  --text-primary: #FFFFFF;
+  --text-secondary: #B8C1E0;
+  --text-muted: #6B7A99;
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Sora', sans-serif;
+  --space-sm: 16px;
+  --space-md: 24px;
+  --space-lg: 48px;
+  --space-xl: 80px;
+  --radius-md: 20px;
+  --radius-lg: 32px;
+  --radius-xl: 48px;
+  --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{font-size:16px;scroll-behavior:smooth;}
+body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-primary);line-height:1.6;-webkit-font-smoothing:antialiased;position:relative;overflow-x:hidden;}
+.bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
+.gradient-orb{position:absolute;border-radius:50%;filter:blur(120px);opacity:0.4;animation:float 20s ease-in-out infinite;}
+.orb-1{width:600px;height:600px;background:radial-gradient(circle, rgba(250, 112, 154, 0.4) 0%, transparent 70%);top:-200px;right:-100px;}
+.orb-2{width:500px;height:500px;background:radial-gradient(circle, rgba(254, 225, 64, 0.3) 0%, transparent 70%);bottom:-150px;left:-100px;}
+@keyframes float{0%,100%{transform:translate(0, 0);}50%{transform:translate(30px, -30px);}}
+.noise-overlay{position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:1;}
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(10, 14, 26, 0.8);backdrop-filter:blur(20px);border-bottom:1px solid var(--glass-border);}
+.nav-container{max-width:1400px;margin:0 auto;padding:var(--space-sm) var(--space-md);display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{display:flex;align-items:center;gap:12px;text-decoration:none;font-family:var(--font-display);font-weight:700;font-size:1.3rem;background:var(--gradient-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.nav-logo-icon{width:36px;height:36px;background:var(--gradient-primary);border-radius:10px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(102, 126, 234, 0.3);}
+.rec-badge{display:flex;align-items:center;gap:8px;padding:8px 20px;background:rgba(250, 112, 154, 0.15);border:1px solid rgba(250, 112, 154, 0.3);border-radius:999px;font-size:0.85rem;font-weight:600;color:var(--accent-pink);}
+.rec-dot{width:12px;height:12px;border-radius:50%;background:var(--accent-pink);box-shadow:0 0 15px var(--accent-pink);animation:recPulse 1s ease-in-out infinite;}
+@keyframes recPulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.4;transform:scale(0.8);}}
+
+.main{position:relative;z-index:2;min-height:100vh;padding:calc(80px + var(--space-lg)) var(--space-md) var(--space-xl);display:flex;align-items:center;justify-content:center;}
+.container{max-width:800px;width:100%;}
+
+.progress-steps{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:var(--space-xl);}
+.step{display:flex;align-items:center;gap:8px;}
+.step-circle{width:40px;height:40px;border-radius:50%;background:var(--glass-bg);border:2px solid var(--glass-border);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:700;font-size:0.9rem;color:var(--text-muted);}
+.step.active .step-circle{background:var(--gradient-danger);border-color:transparent;color:white;box-shadow:0 0 20px rgba(250, 112, 154, 0.6);}
+.step.completed .step-circle{background:linear-gradient(135deg, #30E8BF 0%, #FF8235 100%);border-color:transparent;color:white;}
+.step-label{font-size:0.85rem;font-weight:600;color:var(--text-muted);}
+.step.active .step-label{color:var(--text-primary);}
+.step-line{width:60px;height:2px;background:var(--glass-border);}
+
+.question-reminder{background:var(--glass-bg);border:1px solid var(--glass-border);border-left:4px solid var(--accent-pink);border-radius:var(--radius-md);padding:var(--space-sm);margin-bottom:var(--space-md);backdrop-filter:blur(10px);animation:fadeIn 0.6s var(--ease-out-expo);}
+.question-reminder p{font-size:0.95rem;color:var(--text-secondary);}
+
+.recording-card{background:var(--glass-bg);border:2px solid var(--accent-pink);border-radius:var(--radius-xl);padding:var(--space-lg);backdrop-filter:blur(20px);box-shadow:0 0 40px rgba(250, 112, 154, 0.2), var(--glass-shadow);position:relative;overflow:hidden;animation:fadeIn 0.8s var(--ease-out-expo);}
+.recording-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--gradient-danger);}
+
+.timer-section{text-align:center;margin-bottom:var(--space-lg);}
+.timer-display{font-family:var(--font-display);font-size:5rem;font-weight:700;line-height:1;background:var(--gradient-danger);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px;font-variant-numeric:tabular-nums;}
+.timer-label{font-size:0.9rem;color:var(--text-muted);}
+
+.waveform-section{background:rgba(0, 0, 0, 0.3);border-radius:var(--radius-md);padding:var(--space-md);margin-bottom:var(--space-lg);}
+.waveform-canvas{width:100%;height:150px;display:block;}
+
+.level-meter{margin-bottom:var(--space-lg);}
+.level-label{font-size:0.75rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;}
+.level-track{height:8px;background:rgba(255, 255, 255, 0.1);border-radius:999px;overflow:hidden;}
+.level-fill{height:100%;width:0%;background:var(--gradient-danger);border-radius:999px;transition:width 0.1s ease;box-shadow:0 0 10px rgba(250, 112, 154, 0.6);}
+
+.stop-section{text-align:center;}
+.btn-stop{width:100px;height:100px;border-radius:50%;background:var(--gradient-danger);border:4px solid rgba(255, 255, 255, 0.2);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.4s var(--ease-out-expo);box-shadow:0 8px 32px rgba(250, 112, 154, 0.4);}
+.btn-stop:hover{transform:scale(1.1);box-shadow:0 12px 48px rgba(250, 112, 154, 0.6);}
+.btn-stop:active{transform:scale(0.95);}
+.stop-icon{width:32px;height:32px;background:white;border-radius:6px;}
+.stop-hint{margin-top:var(--space-sm);font-size:0.85rem;color:var(--text-secondary);}
+
+.guidance-cards{display:grid;grid-template-columns:repeat(3, 1fr);gap:var(--space-sm);margin-top:var(--space-lg);}
+.guidance-card{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:var(--space-sm);backdrop-filter:blur(10px);text-align:center;}
+.guidance-icon{font-size:1.5rem;margin-bottom:6px;}
+.guidance-text{font-size:0.8rem;color:var(--text-secondary);}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+@media(max-width:768px){.timer-display{font-size:3.5rem;}.guidance-cards{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+  <div class="bg-canvas">
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+  </div>
+  <div class="noise-overlay"></div>
+
+  <nav class="nav">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+          </svg>
+        </div>
+        Interview Coach
+      </a>
+      <div class="rec-badge">
+        <span class="rec-dot"></span>
+        Recording
+      </div>
+    </div>
+  </nav>
+
+  <main class="main">
+    <div class="container">
+      <div class="progress-steps">
+        <div class="step completed">
+          <div class="step-circle">✓</div>
+          <div class="step-label">Setup</div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step active">
+          <div class="step-circle">2</div>
+          <div class="step-label">Record</div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step">
+          <div class="step-circle">3</div>
+          <div class="step-label">Analyse</div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step">
+          <div class="step-circle">4</div>
+          <div class="step-label">Feedback</div>
+        </div>
+      </div>
+
+      <div class="question-reminder">
+        <p><strong>Question:</strong> <span id="questionText">Loading…</span></p>
+      </div>
+
+      <div class="recording-card">
+        <div class="timer-section">
+          <div class="timer-display" id="timer">00:00</div>
+          <div class="timer-label">Max: 02:00</div>
+        </div>
+
+        <div class="waveform-section">
+          <canvas id="waveformCanvas" class="waveform-canvas" width="700" height="150"></canvas>
+        </div>
+
+        <div class="level-meter">
+          <div class="level-label">Audio Level</div>
+          <div class="level-track">
+            <div class="level-fill" id="levelFill"></div>
+          </div>
+        </div>
+
+        <div class="stop-section">
+          <button class="btn-stop" id="btnStop">
+            <div class="stop-icon"></div>
+          </button>
+          <p class="stop-hint">Click to stop and analyse</p>
+        </div>
+      </div>
+
+      <div class="guidance-cards">
+        <div class="guidance-card">
+          <div class="guidance-icon">💡</div>
+          <div class="guidance-text">Use STAR method</div>
+        </div>
+        <div class="guidance-card">
+          <div class="guidance-icon">⏱️</div>
+          <div class="guidance-text">45–90 seconds ideal</div>
+        </div>
+        <div class="guidance-card">
+          <div class="guidance-icon">🎯</div>
+          <div class="guidance-text">Stay on topic</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+const AppState={_s:{},set(k,v){this._s[k]=v;try{sessionStorage.setItem('aic_'+k,JSON.stringify(v));}catch(e){}},get(k,f=null){if(this._s[k]!==undefined)return this._s[k];try{const r=sessionStorage.getItem('aic_'+k);if(r!==null){this._s[k]=JSON.parse(r);return this._s[k];}}catch(e){}return f;}};
+function formatTime(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');}
+
+(function(){
+  const q=AppState.get('currentQuestion');
+  if(q)document.getElementById('questionText').textContent=q.text;
+
+  const canvas=document.getElementById('waveformCanvas');
+  const ctx=canvas.getContext('2d');
+  const W=700,H=150;
+  canvas.width=W;canvas.height=H;
+
+  let elapsed=0,timerInt=null,waveAnimId=null,history=[];
+  const timer=document.getElementById('timer');
+  const levelFill=document.getElementById('levelFill');
+
+  function startTimer(){
+    timerInt=setInterval(()=>{
+      elapsed++;
+      timer.textContent=formatTime(elapsed);
+      if(elapsed>=120)stopRec();
+    },1000);
+  }
+
+  function drawWave(){
+    const rms=0.1+Math.abs(Math.sin(Date.now()/400))*0.2+Math.random()*0.08;
+    levelFill.style.width=Math.min(100,rms*300)+'%';
+    history.push(rms);
+    if(history.length>W/3)history.shift();
+
+    ctx.clearRect(0,0,W,H);
+    const grad=ctx.createLinearGradient(0,0,W,0);
+    grad.addColorStop(0,'#FA709A');
+    grad.addColorStop(1,'#FEE140');
+
+    ctx.beginPath();
+    ctx.strokeStyle=grad;
+    ctx.lineWidth=3;
+    ctx.shadowBlur=12;
+    ctx.shadowColor='#FA709A';
+
+    const barW=3,gap=2;
+    history.forEach((amp,i)=>{
+      const x=i*(barW+gap);
+      const barH=Math.max(4,amp*H*0.6);
+      const y=(H-barH)/2;
+      ctx.fillStyle=grad;
+      ctx.fillRect(x,y,barW,barH);
+    });
+
+    ctx.shadowBlur=0;
+    waveAnimId=requestAnimationFrame(drawWave);
+  }
+
+  function stopRec(){
+    clearInterval(timerInt);
+    if(waveAnimId)cancelAnimationFrame(waveAnimId);
+    AppState.set('recordingDuration',elapsed);
+    window.location.href='analysis.html';
+  }
+
+  document.getElementById('btnStop').addEventListener('click',stopRec);
+  startTimer();
+  drawWave();
+})();
+  </script>
+</body>
+</html>
