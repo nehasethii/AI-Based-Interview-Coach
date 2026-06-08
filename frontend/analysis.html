@@ -245,29 +245,69 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
   </main>
 
   <script>
-const AppState={_s:{},set(k,v){this._s[k]=v;try{sessionStorage.setItem('aic_'+k,JSON.stringify(v));}catch(e){}},get(k,f=null){if(this._s[k]!==undefined)return this._s[k];try{const r=sessionStorage.getItem('aic_'+k);if(r!==null){this._s[k]=JSON.parse(r);return this._s[k];}}catch(e){}return f;}};
+const AppState={
+  _s:{},
+  set(k,v){this._s[k]=v;try{sessionStorage.setItem('aic_'+k,JSON.stringify(v));}catch(e){}},
+  get(k,f=null){
+    if(this._s[k]!==undefined)return this._s[k];
+    try{
+      const r=sessionStorage.getItem('aic_'+k);
+      if(r!==null){this._s[k]=JSON.parse(r);return this._s[k];}
+    }catch(e){}
+    return f;
+  }
+};
 
-function simulateAnalysis(d){
-  const rand=(a,b)=>Math.round(a+Math.random()*(b-a));
-  const c=rand(42,92),f=rand(40,95),g=rand(50,98),re=rand(35,90),o=Math.round((c+f+g+re)/4);
-  const s=[c>70?'You projected a confident and assertive tone throughout your response.':null,f>70?'Your speech was fluid with minimal filler words and natural pauses.':null,g>80?'Your grammar and sentence structure were consistently strong.':null,re>65?'Your answer stayed clearly on-topic and addressed the question directly.':null,d>40?'You provided a thorough and detailed response.':null].filter(Boolean).slice(0,3);
-  const i=[c<60?'Work on speaking with more conviction — reduce hedging phrases.':null,f<60?'Practice reducing filler words (um, uh, like) and vary your pace.':null,g<70?'Focus on subject-verb agreement and sentence completeness.':null,re<60?'Structure answers using the STAR method to stay on track.':null,d<20?'Aim for more complete answers — ideal responses are 45–90 seconds.':null,d>120?'Try to be more concise — keep answers under 90 seconds.':null].filter(Boolean).slice(0,3);
-  if(s.length===0)s.push('You completed the response — keep practising!');
-  if(i.length===0)i.push('Excellent response overall!');
-  const t=['Um, so I\'ve been working in technology for about three years now, and my experience with backend development has really shaped how I approach problems.','I would say one of my strongest skills is problem-solving. When I encounter a difficult challenge, I break it down systematically.','My background is in information technology, and I have experience with machine learning and natural language processing.','I\'ve worked on several projects involving data analysis and software development. I believe in clean code and thorough documentation.'];
-  return{confidence:c,fluency:f,grammar:g,relevance:re,overall:o,strengths:s,improvements:i,transcript:t[Math.floor(Math.random()*t.length)],durationSec:d};
-}
+(async function(){
 
-(function(){
-  const steps=[{id:1,dur:1800},{id:2,dur:1400},{id:3,dur:2000},{id:4,dur:1600},{id:5,dur:1200}];
+  const storedResult = sessionStorage.getItem("aic_analysisResult");
+  let apiResult = null;
+
+  if (storedResult) {
+    try {
+      apiResult = JSON.parse(storedResult);
+    } catch(e) {
+      console.error("Invalid stored result");
+    }
+  }
+
+  // fallback if missing
+  if (!apiResult) {
+    apiResult = {
+      scores: { confidence: 50, fluency: 50, grammar: 50, relevance: 50 },
+      transcript: "No data available.",
+      feedback: {
+        strengths: ["Try recording again"],
+        improvements: ["No valid analysis found"]
+      }
+    };
+  }
+
+  let isApiDone = true; // already done (important fix)
+
+  const steps=[
+    {id:1,dur:1200},
+    {id:2,dur:1000},
+    {id:3,dur:1400},
+    {id:4,dur:1000},
+    {id:5,dur:800}
+  ];
+
   let cur=0;
 
   function setState(id,state){
     const item=document.getElementById('item'+id);
     const status=document.getElementById('status'+id);
     item.classList.remove('running','done');
-    if(state===1){item.classList.add('running');status.textContent='Running…';}
-    else if(state===2){item.classList.add('done');status.textContent='Done ✓';}
+
+    if(state===1){
+      item.classList.add('running');
+      status.textContent='Running…';
+    }
+    else if(state===2){
+      item.classList.add('done');
+      status.textContent='Done ✓';
+    }
   }
 
   function updateProg(pct){
@@ -276,28 +316,45 @@ function simulateAnalysis(d){
   }
 
   function runNext(){
-    if(cur>=steps.length){finish();return;}
+    if(cur>=steps.length){
+      finish();
+      return;
+    }
+
     const s=steps[cur];
     setState(s.id,1);
+
     const start=(cur/steps.length)*100;
     const end=((cur+1)/steps.length)*100;
     const startTime=Date.now();
+
     const tick=setInterval(()=>{
       const frac=Math.min((Date.now()-startTime)/s.dur,1);
       updateProg(Math.round(start+frac*(end-start)));
-      if(frac>=1){clearInterval(tick);setState(s.id,2);cur++;setTimeout(runNext,250);}
+
+      if(frac>=1){
+        clearInterval(tick);
+        setState(s.id,2);
+        cur++;
+        setTimeout(runNext,200);
+      }
     },50);
   }
 
   function finish(){
     updateProg(100);
-    const dur=AppState.get('recordingDuration',45);
-    AppState.set('analysisResults',simulateAnalysis(dur));
-    setTimeout(()=>{window.location.href='feedback.html';},600);
+
+    // ✅ store final result for feedback page
+    AppState.set('analysisResults', apiResult);
+
+    setTimeout(()=>{
+      window.location.href='feedback.html';
+    },600);
   }
 
   setTimeout(runNext,400);
+
 })();
-  </script>
+</script>
 </body>
 </html>

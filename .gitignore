@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+
+venv/
+env/
+
+.ipynb_checkpoints/
+
+node_modules/
+
+*.wav
+*.mp3

@@ -1,0 +1,142 @@
+[
+  {
+    "confidence": 52,
+    "fluency": 80,
+    "grammar": 100,
+    "relevance": 84,
+    "pitch": 0,
+    "pauses": 0,
+    "energy": 0,
+    "duration": 0
+  },
+  {
+    "confidence": 49,
+    "fluency": 80,
+    "grammar": 100,
+    "relevance": 70,
+    "pitch": 0,
+    "pauses": 0,
+    "energy": 0,
+    "duration": 0
+  },
+  {
+    "confidence": 38,
+    "fluency": 80,
+    "grammar": 100,
+    "relevance": 27,
+    "pitch": 0,
+    "pauses": 0,
+    "energy": 0,
+    "duration": 0
+  },
+  {
+    "confidence": 44,
+    "fluency": 80,
+    "grammar": 100,
+    "relevance": 49,
+    "pitch": 0,
+    "pauses": 0,
+    "energy": 0,
+    "duration": 0
+  },
+  {
+    "confidence": 44,
+    "fluency": 80,
+    "grammar": 100,
+    "relevance": 51,
+    "pitch": 0,
+    "pauses": 0,
+    "energy": 0,
+    "duration": 0
+  },
+  {
+    "confidence": 23,
+    "fluency": 80,
+    "grammar": 90,
+    "relevance": 82,
+    "pitch": 0,
+    "pauses": 0,
+    "energy": 0,
+    "duration": 0
+  },
+  {
+    "confidence": 39,
+    "fluency": 80,
+    "grammar": 100,
+    "relevance": 29,
+    "pitch": 0,
+    "pauses": 0,
+    "energy": 0,
+    "duration": 0
+  },
+  {
+    "confidence": 45,
+    "fluency": 80,
+    "grammar": 90,
+    "relevance": 53,
+    "pitch": 0,
+    "pauses": 0,
+    "energy": 0,
+    "duration": 0
+  },
+  {
+    "confidence": 26,
+    "fluency": 80,
+    "grammar": 50,
+    "relevance": 5,
+    "pitch": 0,
+    "pauses": 0,
+    "energy": 0,
+    "duration": 0
+  },
+  {
+    "confidence": 13,
+    "fluency": 80,
+    "grammar": 100,
+    "relevance": 45,
+    "pitch": 0,
+    "pauses": 0,
+    "energy": 0,
+    "duration": 0
+  },
+  {
+    "confidence": 45,
+    "fluency": 80,
+    "grammar": 100,
+    "relevance": 53,
+    "pitch": 0,
+    "pauses": 0,
+    "energy": 0,
+    "duration": 0
+  },
+  {
+    "confidence": 48,
+    "fluency": 80,
+    "grammar": 100,
+    "relevance": 64,
+    "pitch": 0,
+    "pauses": 0,
+    "energy": 0,
+    "duration": 0
+  },
+  {
+    "confidence": 33,
+    "fluency": 82,
+    "grammar": 100,
+    "relevance": 0,
+    "pitch": 0,
+    "pauses": 0,
+    "energy": 0,
+    "duration": 0
+  },
+  {
+    "confidence": 44,
+    "fluency": 80,
+    "grammar": 100,
+    "relevance": 51,
+    "pitch": 0,
+    "pauses": 0,
+    "energy": 0,
+    "duration": 0
+  }
+]

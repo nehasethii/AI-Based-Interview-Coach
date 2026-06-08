@@ -257,47 +257,167 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
   </main>
 
   <script>
-const AppState={_s:{},set(k,v){this._s[k]=v;try{sessionStorage.setItem('aic_'+k,JSON.stringify(v));}catch(e){}},get(k,f=null){if(this._s[k]!==undefined)return this._s[k];try{const r=sessionStorage.getItem('aic_'+k);if(r!==null){this._s[k]=JSON.parse(r);return this._s[k];}}catch(e){}return f;}};
-const QUESTIONS=[{id:1,category:'Behavioural',text:'Tell me about yourself and your background.'},{id:2,category:'Behavioural',text:'Describe a challenging project you worked on and how you handled it.'},{id:3,category:'Behavioural',text:'How do you handle tight deadlines and pressure at work?'},{id:7,category:'Situational',text:'Where do you see yourself in five years?'},{id:8,category:'Situational',text:'How would you explain a technical concept to a non-technical stakeholder?'},{id:9,category:'Behavioural',text:'Describe a time when you had to work with a difficult team member.'},{id:11,category:'Situational',text:'If you discovered a critical bug right before a product launch, what would you do?'},{id:12,category:'Behavioural',text:'Tell me about a time you showed leadership without a formal title.'}];
-function getRandomQ(excId){const pool=excId?QUESTIONS.filter(q=>q.id!==excId):QUESTIONS;return pool[Math.floor(Math.random()*pool.length)];}
+const AppState={
+  _s:{},
+  set(k,v){this._s[k]=v;try{sessionStorage.setItem('aic_'+k,JSON.stringify(v));}catch(e){}},
+  get(k,f=null){
+    if(this._s[k]!==undefined)return this._s[k];
+    try{
+      const r=sessionStorage.getItem('aic_'+k);
+      if(r!==null){this._s[k]=JSON.parse(r);return this._s[k];}
+    }catch(e){}
+    return f;
+  }
+};
+
 function scoreColor(s){return s>=75?'#30E8BF':s>=50?'#FFD93D':'#FA709A';}
 function scoreLabel(s){return s>=80?'Excellent':s>=65?'Good':s>=50?'Fair':'Needs Work';}
 function formatTime(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');}
-function animateCounter(el,target,dur=1200){const start=performance.now();function u(now){const p=Math.min((now-start)/dur,1),e=1-Math.pow(1-p,3);el.textContent=Math.round(e*target);if(p<1)requestAnimationFrame(u);}requestAnimationFrame(u);}
-function buildCircle(container,score,color,size=100){const r=(size-12)/2,c=2*Math.PI*r,o=c-(score/100)*c;const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('width',size);svg.setAttribute('height',size);const track=document.createElementNS('http://www.w3.org/2000/svg','circle');track.setAttribute('cx',size/2);track.setAttribute('cy',size/2);track.setAttribute('r',r);track.setAttribute('fill','none');track.setAttribute('stroke','rgba(255,255,255,0.05)');track.setAttribute('stroke-width','6');const arc=document.createElementNS('http://www.w3.org/2000/svg','circle');arc.setAttribute('cx',size/2);arc.setAttribute('cy',size/2);arc.setAttribute('r',r);arc.setAttribute('fill','none');arc.setAttribute('stroke',color);arc.setAttribute('stroke-width','6');arc.setAttribute('stroke-linecap','round');arc.setAttribute('stroke-dasharray',c);arc.setAttribute('stroke-dashoffset',c);arc.setAttribute('transform',`rotate(-90 ${size/2} ${size/2})`);arc.style.transition='stroke-dashoffset 1.5s cubic-bezier(0.4,0,0.2,1)';arc.style.filter=`drop-shadow(0 0 8px ${color})`;svg.appendChild(track);svg.appendChild(arc);container.appendChild(svg);setTimeout(()=>{arc.setAttribute('stroke-dashoffset',o);},100);}
 
-function simulateAnalysis(d){const rand=(a,b)=>Math.round(a+Math.random()*(b-a));const c=rand(42,92),f=rand(40,95),g=rand(50,98),re=rand(35,90),o=Math.round((c+f+g+re)/4);const s=[c>70?'You projected a confident and assertive tone throughout your response.':null,f>70?'Your speech was fluid with minimal filler words and natural pauses.':null,g>80?'Your grammar and sentence structure were consistently strong.':null,re>65?'Your answer stayed clearly on-topic and addressed the question directly.':null,d>40?'You provided a thorough and detailed response.':null].filter(Boolean).slice(0,3);const i=[c<60?'Work on speaking with more conviction — reduce hedging phrases.':null,f<60?'Practice reducing filler words and vary your pace.':null,g<70?'Focus on subject-verb agreement and sentence completeness.':null,re<60?'Structure answers using the STAR method.':null,d<20?'Aim for more complete answers (45–90 seconds ideal).':null,d>120?'Try to be more concise — keep under 90 seconds.':null].filter(Boolean).slice(0,3);if(s.length===0)s.push('You completed the response — keep practising!');if(i.length===0)i.push('Excellent response overall!');const t=['Um, so I\'ve been working in technology for about three years now, and my experience with backend development has really shaped how I approach problems.','I would say one of my strongest skills is problem-solving. When I encounter a difficult challenge, I break it down systematically.','My background is in information technology, and I have experience with machine learning and natural language processing.','I\'ve worked on several projects involving data analysis and software development. I believe in clean code and documentation.'];return{confidence:c,fluency:f,grammar:g,relevance:re,overall:o,strengths:s,improvements:i,transcript:t[Math.floor(Math.random()*t.length)],durationSec:d};}
+function animateCounter(el,target,dur=1200){
+  const start=performance.now();
+  function u(now){
+    const p=Math.min((now-start)/dur,1);
+    const e=1-Math.pow(1-p,3);
+    el.textContent=Math.round(e*target);
+    if(p<1)requestAnimationFrame(u);
+  }
+  requestAnimationFrame(u);
+}
+
+function buildCircle(container,score,color,size=100){
+  const r=(size-12)/2,c=2*Math.PI*r,o=c-(score/100)*c;
+
+  const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+  svg.setAttribute('width',size);
+  svg.setAttribute('height',size);
+
+  const track=document.createElementNS('http://www.w3.org/2000/svg','circle');
+  track.setAttribute('cx',size/2);
+  track.setAttribute('cy',size/2);
+  track.setAttribute('r',r);
+  track.setAttribute('stroke','rgba(255,255,255,0.05)');
+  track.setAttribute('fill','none');
+  track.setAttribute('stroke-width','6');
+
+  const arc=document.createElementNS('http://www.w3.org/2000/svg','circle');
+  arc.setAttribute('cx',size/2);
+  arc.setAttribute('cy',size/2);
+  arc.setAttribute('r',r);
+  arc.setAttribute('stroke',color);
+  arc.setAttribute('fill','none');
+  arc.setAttribute('stroke-width','6');
+  arc.setAttribute('stroke-linecap','round');
+  arc.setAttribute('stroke-dasharray',c);
+  arc.setAttribute('stroke-dashoffset',c);
+  arc.setAttribute('transform',`rotate(-90 ${size/2} ${size/2})`);
+
+  svg.appendChild(track);
+  svg.appendChild(arc);
+  container.appendChild(svg);
+
+  setTimeout(()=>{arc.setAttribute('stroke-dashoffset',o);},100);
+}
 
 (function(){
-  let r=AppState.get('analysisResults');
-  const q=AppState.get('currentQuestion')||QUESTIONS[0];
-  if(!r)r=simulateAnalysis(AppState.get('recordingDuration',45));
 
-  buildCircle(document.getElementById('heroRing'),r.overall,scoreColor(r.overall),180);
-  animateCounter(document.getElementById('heroNum'),r.overall,1000);
-  document.getElementById('heroLabel').textContent=scoreLabel(r.overall);
-  document.getElementById('heroNum').style.color=scoreColor(r.overall);
+  const raw = AppState.get('analysisResults');
+  const q = AppState.get('currentQuestion') || {text:"Unknown", category:"General"};
+  const dur = AppState.get('recordingDuration', 45);
 
-  document.getElementById('questionText').textContent=q.text;
-  document.getElementById('categoryBadge').textContent=q.category;
-  document.getElementById('duration').textContent=formatTime(r.durationSec);
+  let r;
 
-  [{id:1,val:r.confidence},{id:2,val:r.fluency},{id:3,val:r.grammar},{id:4,val:r.relevance}].forEach(m=>{
-    const color=scoreColor(m.val);
-    buildCircle(document.getElementById('ring'+m.id),m.val,color,100);
-    const valEl=document.getElementById('val'+m.id);
-    animateCounter(valEl,m.val,1200);
-    valEl.style.color=color;
-    document.getElementById('lbl'+m.id).textContent=scoreLabel(m.val);
+  if(raw && raw.scores){
+    r = {
+      confidence: raw.scores.confidence || 0,
+      fluency: raw.scores.fluency || 0,
+      grammar: raw.scores.grammar || 0,
+      relevance: raw.scores.relevance || 0,
+      transcript: raw.transcript || "No transcript available",
+      strengths: raw.feedback?.strengths || ["Good attempt"],
+      improvements: raw.feedback?.improvements || ["Keep practicing"],
+      durationSec: dur
+    };
+
+    r.overall = Math.round(
+      (r.confidence + r.fluency + r.grammar + r.relevance) / 4
+    );
+
+  } else {
+    r = {
+      overall: 50,
+      confidence: 50,
+      fluency: 50,
+      grammar: 50,
+      relevance: 50,
+      transcript: "No data available.",
+      strengths: ["Try again"],
+      improvements: ["No analysis found"],
+      durationSec: dur
+    };
+  }
+
+  // UI rendering
+  buildCircle(document.getElementById('heroRing'), r.overall, scoreColor(r.overall), 180);
+  animateCounter(document.getElementById('heroNum'), r.overall);
+  document.getElementById('heroLabel').textContent = scoreLabel(r.overall);
+
+  document.getElementById('questionText').textContent = q.text;
+  document.getElementById('categoryBadge').textContent = q.category;
+  document.getElementById('duration').textContent = formatTime(r.durationSec);
+
+  [
+    {id:1,val:r.confidence},
+    {id:2,val:r.fluency},
+    {id:3,val:r.grammar},
+    {id:4,val:r.relevance}
+  ].forEach(m=>{
+    const color = scoreColor(m.val);
+    buildCircle(document.getElementById('ring'+m.id), m.val, color, 100);
+
+    const el = document.getElementById('val'+m.id);
+    animateCounter(el, m.val);
+    el.style.color = color;
+
+    document.getElementById('lbl'+m.id).textContent = scoreLabel(m.val);
   });
 
-  document.getElementById('transcript').textContent=r.transcript;
-  r.strengths.forEach(s=>{const li=document.createElement('li');li.textContent=s;document.getElementById('strengthsList').appendChild(li);});
-  r.improvements.forEach(s=>{const li=document.createElement('li');li.textContent=s;document.getElementById('improvementsList').appendChild(li);});
+  document.getElementById('transcript').textContent = r.transcript;
 
-  document.getElementById('btnAgain').addEventListener('click',()=>{window.location.href='setup.html';});
-  document.getElementById('btnNew').addEventListener('click',()=>{AppState.set('currentQuestion',getRandomQ(q.id));window.location.href='setup.html';});
+  const sList = document.getElementById('strengthsList');
+  const iList = document.getElementById('improvementsList');
+
+  r.strengths.forEach(s=>{
+    const li=document.createElement('li');
+    li.textContent=s;
+    sList.appendChild(li);
+  });
+
+  r.improvements.forEach(s=>{
+    const li=document.createElement('li');
+    li.textContent=s;
+    iList.appendChild(li);
+  });
+
+  // =========================
+  // BUTTONS FIXED 🔥
+  // =========================
+  document.getElementById('btnAgain').onclick = ()=>{
+    window.location.href='setup.html';
+  };
+
+  document.getElementById('btnNew').onclick = async ()=>{
+    try{
+      const res = await fetch("http://localhost:5000/api/questions"); // ✅ FIXED
+      const newQ = await res.json();
+      AppState.set('currentQuestion', newQ);
+    }catch(e){
+      console.error(e);
+    }
+    window.location.href='setup.html';
+  };
+
 })();
-  </script>
+</script>
 </body>
 </html>

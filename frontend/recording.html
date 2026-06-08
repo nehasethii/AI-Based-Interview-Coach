@@ -192,70 +192,162 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
 
   <script>
 const AppState={_s:{},set(k,v){this._s[k]=v;try{sessionStorage.setItem('aic_'+k,JSON.stringify(v));}catch(e){}},get(k,f=null){if(this._s[k]!==undefined)return this._s[k];try{const r=sessionStorage.getItem('aic_'+k);if(r!==null){this._s[k]=JSON.parse(r);return this._s[k];}}catch(e){}return f;}};
-function formatTime(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');}
 
-(function(){
+function formatTime(s){
+  return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+}
+
+(async function(){
+
   const q=AppState.get('currentQuestion');
-  if(q)document.getElementById('questionText').textContent=q.text;
+  if(q) document.getElementById('questionText').textContent=q.text;
 
   const canvas=document.getElementById('waveformCanvas');
   const ctx=canvas.getContext('2d');
   const W=700,H=150;
   canvas.width=W;canvas.height=H;
 
-  let elapsed=0,timerInt=null,waveAnimId=null,history=[];
+  let elapsed=0,timerInt=null,waveAnimId=null;
   const timer=document.getElementById('timer');
   const levelFill=document.getElementById('levelFill');
+
+  let mediaRecorder;
+  let audioChunks = [];
+  let audioContext;
+  let analyser;
+  let dataArray;
+  let source;
+
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    analyser = audioContext.createAnalyser();
+    source = audioContext.createMediaStreamSource(stream);
+    source.connect(analyser);
+    analyser.fftSize = 256;
+
+    const bufferLength = analyser.frequencyBinCount;
+    dataArray = new Uint8Array(bufferLength);
+
+    mediaRecorder = new MediaRecorder(stream);
+
+    mediaRecorder.ondataavailable = event => {
+      audioChunks.push(event.data);
+    };
+
+    // 🔥 FIXED: BACKEND INTEGRATION
+    mediaRecorder.onstop = async () => {
+      try {
+        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+
+        const formData = new FormData();
+        formData.append("audio", audioBlob, "recording.wav");
+
+        const question = AppState.get('currentQuestion')?.text || "Tell me about yourself.";
+        formData.append("question", question);
+
+        const response = await fetch("http://localhost:5000/api/process_audio", {
+          method: "POST",
+          body: formData
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(result.error || "Processing failed");
+        }
+
+        // ✅ store full backend result
+        sessionStorage.setItem("aic_analysisResult", JSON.stringify(result));
+
+        window.location.href = "analysis.html";
+
+      } catch (error) {
+        console.error("Processing Error:", error);
+        alert("Error processing audio: " + error.message);
+
+        // reset UI if failed
+        document.getElementById('btnStop').disabled = false;
+        document.getElementById('btnStop').style.opacity = '1';
+        document.querySelector('.stop-hint').textContent = 'Click to stop and analyse';
+      }
+    };
+
+    mediaRecorder.start();
+    startTimer();
+    drawWave();
+
+  } catch (err) {
+    console.error("Mic error:", err);
+    alert("Microphone access is required. Please allow it and refresh.");
+  }
 
   function startTimer(){
     timerInt=setInterval(()=>{
       elapsed++;
       timer.textContent=formatTime(elapsed);
-      if(elapsed>=120)stopRec();
+      if(elapsed>=120) stopRec();
     },1000);
   }
 
+  let history=[];
+
   function drawWave(){
-    const rms=0.1+Math.abs(Math.sin(Date.now()/400))*0.2+Math.random()*0.08;
-    levelFill.style.width=Math.min(100,rms*300)+'%';
-    history.push(rms);
-    if(history.length>W/3)history.shift();
+    if(analyser){
+      analyser.getByteFrequencyData(dataArray);
+
+      let sum = 0;
+      for(let i=0;i<dataArray.length;i++) sum += dataArray[i];
+
+      let average = sum / dataArray.length;
+      let rms = average / 128.0;
+
+      levelFill.style.width=Math.min(100, average)+'%';
+
+      history.push(rms);
+      if(history.length>W/3) history.shift();
+    }
 
     ctx.clearRect(0,0,W,H);
+
     const grad=ctx.createLinearGradient(0,0,W,0);
     grad.addColorStop(0,'#FA709A');
     grad.addColorStop(1,'#FEE140');
 
-    ctx.beginPath();
-    ctx.strokeStyle=grad;
-    ctx.lineWidth=3;
-    ctx.shadowBlur=12;
-    ctx.shadowColor='#FA709A';
-
     const barW=3,gap=2;
+
     history.forEach((amp,i)=>{
       const x=i*(barW+gap);
-      const barH=Math.max(4,amp*H*0.6);
+      const barH=Math.max(4,amp*H*1.5);
       const y=(H-barH)/2;
       ctx.fillStyle=grad;
       ctx.fillRect(x,y,barW,barH);
     });
 
-    ctx.shadowBlur=0;
     waveAnimId=requestAnimationFrame(drawWave);
   }
 
   function stopRec(){
     clearInterval(timerInt);
-    if(waveAnimId)cancelAnimationFrame(waveAnimId);
+    if(waveAnimId) cancelAnimationFrame(waveAnimId);
+
+    if(mediaRecorder && mediaRecorder.state !== "inactive"){
+      mediaRecorder.stop();
+    }
+
     AppState.set('recordingDuration',elapsed);
-    window.location.href='analysis.html';
+
+    const btn=document.getElementById('btnStop');
+    btn.disabled=true;
+    btn.style.opacity='0.5';
+
+    document.querySelector('.stop-hint').textContent='Processing...';
   }
 
   document.getElementById('btnStop').addEventListener('click',stopRec);
-  startTimer();
-  drawWave();
+
 })();
-  </script>
+</script>
 </body>
 </html>

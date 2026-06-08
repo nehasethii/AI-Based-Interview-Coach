@@ -638,17 +638,32 @@ body {
 
   <script>
 const AppState={_s:{},set(k,v){this._s[k]=v;try{sessionStorage.setItem('aic_'+k,JSON.stringify(v));}catch(e){}},get(k,f=null){if(this._s[k]!==undefined)return this._s[k];try{const r=sessionStorage.getItem('aic_'+k);if(r!==null){this._s[k]=JSON.parse(r);return this._s[k];}}catch(e){}return f;}};
-const QUESTIONS=[{id:1,category:'Behavioural',text:'Tell me about yourself and your background.'},{id:2,category:'Behavioural',text:'Describe a challenging project you worked on and how you handled it.'},{id:3,category:'Behavioural',text:'How do you handle tight deadlines and pressure at work?'},{id:7,category:'Situational',text:'Where do you see yourself in five years?'},{id:8,category:'Situational',text:'How would you explain a technical concept to a non-technical stakeholder?'},{id:9,category:'Behavioural',text:'Describe a time when you had to work with a difficult team member.'},{id:11,category:'Situational',text:'If you discovered a critical bug right before a product launch, what would you do?'},{id:12,category:'Behavioural',text:'Tell me about a time you showed leadership without a formal title.'}];
-function getRandomQ(excId){const pool=excId?QUESTIONS.filter(q=>q.id!==excId):QUESTIONS;return pool[Math.floor(Math.random()*pool.length)];}
 
-(function(){
-  let currentQ=AppState.get('currentQuestion')||getRandomQ();
+const defaultQ = {id: 1, category: 'Behavioural', text: 'Tell me about yourself and your background.'};
+
+async function fetchQuestion() {
+    try {
+        const res = await fetch('http://127.0.0.1:5000/api/questions');
+        if(res.ok) {
+            return await res.json();
+        }
+    } catch(e) {
+        console.error(e);
+    }
+    return defaultQ;
+}
+
+(async function(){
+  
+  let currentQ=AppState.get('currentQuestion') || await fetchQuestion();
   AppState.set('currentQuestion',currentQ);
   document.getElementById('questionText').textContent=currentQ.text;
   document.getElementById('questionCategory').textContent=currentQ.category;
 
-  document.getElementById('btnNewQuestion').addEventListener('click',()=>{
-    const newQ=getRandomQ(currentQ.id);
+  document.getElementById('btnNewQuestion').addEventListener('click', async ()=>{
+    const btn = document.getElementById('btnNewQuestion');
+    btn.disabled = true;
+    const newQ=await fetchQuestion();
     currentQ=newQ;
     AppState.set('currentQuestion',newQ);
     const qText=document.getElementById('questionText');
@@ -657,6 +672,7 @@ function getRandomQ(excId){const pool=excId?QUESTIONS.filter(q=>q.id!==excId):QU
       qText.textContent=newQ.text;
       document.getElementById('questionCategory').textContent=newQ.category;
       qText.style.opacity='1';
+      btn.disabled = false;
     },200);
   });
 

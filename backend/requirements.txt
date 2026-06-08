@@ -1,0 +1,13 @@
+Flask==2.3.2
+Flask-Cors==4.0.0
+openai-whisper
+librosa==0.10.1
+transformers==4.35.2
+sentence-transformers==2.2.2
+language-tool-python==2.7.1
+torch
+torchaudio
+soundfile==0.12.1
+numpy==1.26.0
+scipy==1.11.3
+Werkzeug==2.3.6

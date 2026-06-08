@@ -1,0 +1,683 @@
+
+
+
+AI- Based Interview Coach
+
+
+
+Synopsis submitted in the partial fulfillment of the requirements
+
+for the award of the degree of 
+
+
+
+
+
+BACHELOR OF TECHNOLOGY
+
+in
+
+INFORMATION TECHNOLOGY
+
+
+
+by
+
+
+
+
+
+Submitted by
+
+Neha (2822633)
+
+Kapil Saini (2822656)
+
+Ronak (2822646)
+
+
+
+
+
+Under the Supervision of 
+
+Dr. Sorabh Gupta
+
+Assistant Professor, IT
+
+
+
+
+
+
+
+
+
+Department of Information Technology
+
+PANIPAT INSTITUTE OF ENGINEERING &amp; TECHNOLOGY
+
+SAMALKHA, PANIPAT 132102
+
+January 2026
+
+
+
+
+CANDIDATE'S DECLARATION
+
+
+
+
+
+
+
+
+We hereby declare that the work which is being presented here entitled, "AI-Based Interview Coach” by Neha (2822633), Kapil Saini (2822656), Ronak (2822646) in partial fulfillment of requirements for the award of the degree of B.Tech. in Information Technology submitted in the Department of Information Technology, PIET, Panipat affiliated to Kurukshetra University, is an authentic record of our own work under the supervision of Dr. Sorabh Gupta. The matter presented in this synopsis has not been submitted by us in full or in part to any other University / Institute for the award of 
+B.Tech
+ degree.
+
+
+
+
+
+
+
+Name of Students: Neha, Kapil Saini, RonakDate: 28.01.2026
+
+Roll Numbers: 2822633, 2822656, 2822646
+
+
+
+
+
+
+
+
+
+
+
+This is to certify that the above statement made by the candidate is correct to the best of our knowledge. 
+
+
+
+
+
+
+
+
+
+
+
+Dr. Sorabh Gupta
+
+
+Assistant Professor
+
+
+PIET, Panipat
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Dr. Suman Mann
+
+
+Professor &amp; Head, Department of Information Technology
+
+
+
+
+Abstract
+
+
+
+The AI-Based Interview Coach project focuses on designing an edge-AI system that evaluates a candidate’s spoken interview responses and provides instant, personalized feedback on communication quality. The system leverages pretrained speech and natural language processing models to analyze both audio and textual aspects of interview answers, including speech fluency, confidence indicators, grammatical correctness, sentiment, and answer relevance. Speech-to-text conversion is performed using an offline deep learning model, after which the generated transcript is processed through NLP techniques for sentiment analysis, grammar checking, and semantic similarity assessment. Confidence is estimated using an explainable, rule-based approach derived from audio features such as pause duration, speaking rate, and pitch variation. The complete system operates entirely offline, does not store user data, and is designed to be deployable on standard personal computers, emphasizing user privacy, accessibility, and practical interview preparation.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+TABLE OF CONTENTS
+
+
+
+
+S. No.
+
+Title
+
+Page No.
+
+
+
+
+
+
+
+
+
+
+1
+
+Introduction of the problem and objectives
+
+1-2
+
+2
+
+Literature Survey
+
+2-4
+
+3
+
+Methodology and Workflow
+
+4-5
+
+4
+
+Hardware and Software Requirements
+
+5-6
+
+5 
+Project Title Map with Engineering POs and Program/Department Specific Outcomes
+
+6
+
+6 
+
+Project Categorization
+
+7
+
+7 
+
+Project Map with SDG Goal
+
+7
+
+8
+
+Conclusions 
+
+8
+
+9
+
+Specific Contributions of Team Members
+
+9
+
+10
+
+Key References
+
+10
+
+
+
+1. Introduction of the Problem and Objectives
+
+Interview preparation is a critical challenge for students and job seekers, as effective performance depends not only on technical knowledge but also on communication skills, confidence, clarity, and relevance of responses. Many candidates struggle to objectively assess their interview performance, particularly in areas such as speech fluency, confidence, and answer delivery. Existing interview preparation tools often rely on online platforms, human evaluators, or cloud-based AI systems, which can raise concerns related to accessibility, privacy, cost, and internet dependency.
+
+With recent advances in speech processing and natural language processing (NLP), it is possible to 
+analyze
+ spoken interview responses using pretrained AI models to provide structured feedback. However, there is a need for a privacy-preserving, offline, and accessible interview coaching system that can evaluate spoken responses and provide immediate, actionable feedback without storing user data or requiring internet connectivity.
+
+Specific Objectives
+
+The main objectives of the AI-Based Interview Coach project are:
+
+To develop an offline edge-AI system that 
+analyzes
+ spoken interview responses using pretrained speech and NLP models.
+
+To evaluate key communication aspects such as speech fluency, grammatical correctness, sentiment, answer relevance, and confidence indicators from audio and text data.
+
+To provide instant, explainable feedback for interview practice while ensuring user privacy and zero internet dependency.
+
+Justification of Objectives
+
+The objectives are formulated to address the limitations of existing interview preparation solutions by prioritizing offline accessibility, privacy, and practical usability. By leveraging pretrained models for speech-to-text conversion and NLP-based analysis, the system avoids the complexity and computational cost of training large-scale models while still utilizing modern AI techniques. The inclusion of explainable, rule-based confidence estimation ensures transparency in feedback generation and avoids black-box decision making. Operating entirely offline makes the system suitable for students, academic institutions, and low-connectivity environments, while eliminating concerns related to data storage and user profiling.
+
+Strengths
+
+
+Offline Operation: The system runs entirely on local machines, eliminating reliance on internet connectivity.
+
+
+Privacy-Preserving: No user audio or interview data is stored or transmitted externally.
+
+
+AI-Based Analysis: Uses pretrained deep learning and NLP models for 
+analyzing
+ speech and text responses.
+
+
+Explainable Feedback: Confidence estimation is based on interpretable audio features rather than opaque models.
+
+
+Practical Applicability: Designed specifically for interview practice, making it useful for students and job seekers.
+
+Limitations
+
+
+Storage Overhead: Local deployment requires moderate disk space to store pretrained models. 
+
+
+Not a Replacement for Human Coaching: The system provides automated guidance but cannot fully replace expert human interview coaching.
+
+
+2. Literature review
+
+1. “Automated Interview Scoring Using Speech and Language Features” (2020)
+
+• Authors: Su-Youn Yoon et al.• Published in: IEEE Transactions on Affective Computing
+
+• Summary:
+
+This paper presents an automated system for evaluating interview responses using a combination of acoustic speech features and linguistic features extracted from transcripts. The study 
+analyzes
+ speaking rate, pauses, lexical richness, and syntactic complexity to predict interview performance scores. Machine learning models demonstrate that speech 
+behavior
+ and language usage strongly correlate with perceived confidence and communication effectiveness, establishing the feasibility of AI-driven interview evaluation.
+
+
+
+2. “Speech-Based Assessment of Communication Skills for Job Interviews” (2022)
+
+• Authors: R. Chen, M. Eskenazi• Published in: 
+Interspeech
+ 2022
+
+• Summary:This study investigates the use of acoustic speech features such as fluency, pause duration, pitch variation, and articulation rate to assess communication skills in job interview scenarios. The results show that speech-only features can effectively predict communication competence, highlighting the importance of prosodic and temporal cues in spoken responses.
+
+3. “Explainable AI for Spoken Language Assessment” (2023)
+
+• Authors: A. Malhotra et al.• Published in: IEEE Access
+
+• Summary:
+
+This paper proposes explainable AI techniques for evaluating spoken responses in educational and assessment settings. It emphasizes interpretable speech features such as speaking rate, pauses, and pitch variation instead of black-box models. The study demonstrates that explainability improves user trust while maintaining effective assessment performance.
+
+4. “Ethical and Fairness Challenges in Automated Video Interview Systems” (2021)
+
+• Authors: Mark J. Johnson et al.• Published in: ACM Conference on Fairness, Accountability, and Transparency (
+FAccT
+ 2021)
+
+• Summary:
+
+This work 
+analyzes
+ AI-driven interview systems used in real hiring environments, focusing on speech, language, and 
+behavioral
+ cues for candidate evaluation. It highlights ethical concerns related to bias, transparency, and privacy in automated interview assessment and stresses the importance of responsible AI design.
+
+5. “Edge AI for Speech and Natural Language Processing Applications” (2024)
+
+• Authors: S. Verma, P. Gupta• Published in: ACM Computing Surveys
+
+• Summary:
+
+This survey reviews recent advancements in edge AI for speech and NLP applications, emphasizing local deployment of pretrained models without cloud dependency. It discusses trade-offs between model size, performance, privacy, and accessibility, and identifies education and personal coaching as promising application domains for edge-AI systems.
+
+
+
+
+
+
+3. Methodology and Workflow
+
+
+
+The AI-Based Offline Interview Coach follows a structured workflow to 
+analyze
+ spoken interview responses and provide instant, privacy-preserving feedback.
+
+1. Audio Capture &amp; Preprocessing
+
+Record interview responses using a local microphone in an offline environment.
+
+Convert audio to a standardized format (WAV) and perform basic preprocessing such as noise handling and segmentation.
+
+Extract timing information (duration, pauses) required for speech analysis.
+
+2. Speech-to-Text &amp; Feature Extraction
+
+Convert spoken responses into text using an offline pretrained speech-to-text model.
+
+Extract audio features such as speaking rate, pause duration, pitch variation, and filler word frequency.
+
+Prepare transcript data for further NLP-based analysis.
+
+3. NLP-Based Analysis
+
+
+Analyze
+ the transcript for grammatical correctness using a local grammar checking module.
+
+Perform sentiment analysis to understand emotional tone of responses.
+
+Evaluate answer relevance by measuring semantic similarity between interview questions and responses.
+
+4. Confidence Scoring &amp; Feedback Generation
+
+Estimate confidence using explainable, rule-based logic derived from extracted audio features.
+
+Combine speech and NLP metrics to generate overall performance scores.
+
+Produce instant, user-friendly feedback highlighting strengths and areas for improvement.
+
+5. Output Visualization &amp; User Interface
+
+Display transcripts, scores, and feedback through a local web or desktop interface.
+
+Ensure that no interview data is stored after session completion, maintaining privacy.
+
+Project Timeline
+
+Phase
+
+Task
+
+Duration
+
+Audio Capture &amp; Preprocessing
+
+Speech recording and audio preprocessing
+
+2 weeks
+
+Speech-to-Text &amp; Feature Extraction
+
+Offline transcription and audio feature extraction
+
+2 weeks
+
+NLP-Based Analysis
+
+Grammar, sentiment, and relevance analysis
+
+2 weeks
+
+Confidence Scoring &amp; Feedback
+
+Rule-based confidence evaluation and feedback generation
+
+2 weeks
+
+Testing &amp; Validation
+
+Functional testing and system refinement
+
+2 weeks
+
+
+
+
+4. Hardware and Software Requirements 
+
+
+
+Hardware Requirements:
+
+Processor: Intel Core i5 or higher
+
+RAM: 16GB or more
+
+Storage: 512GB SSD or more
+
+Graphics Card: NVIDIA GTX 1650 or equivalent 
+
+Peripherals: Keyboard, Mouse, Monitor
+
+Software Requirements:
+
+Operating System: Windows 10 / Ubuntu 20.04 or higher
+
+Development Environment: Visual Studio Code / 
+Jupyter
+ Notebook / Google 
+Colab
+
+
+Programming Language: Python 3.8 or higher
+
+Libraries/Frameworks: TensorFlow, 
+Keras
+, 
+PyTorch
+, Scikit-learn, Hugging Face Transformers, NLTK, 
+SpaCy
+
+
+Other Tools: Git, Docker
+
+
+5. Project Title Map with Engineering Program Outcomes and Program/Department Specific Outcomes 
+
+
+
+
+Project Title
+
+Engineering Program Outcomes (POs)
+
+Department Specific Outcomes (DSOs)
+
+AI-Based Interview Coach
+
+PO1, PO2, PO3, PO4, PO5, PO6, PO8, PO9, PO10, PO11 PO12
+
+PSO1, PSO2
+
+Engineering Program Outcomes (POs) Mapped to the Project
+
+
+PO1 (Engineering Knowledge)
+
+
+PO2 (Problem Analysis)
+
+
+PO3 (Design &amp; Development of Solutions)
+
+
+PO4 (Conducting Investigations of Complex Problems)
+
+
+PO5 (Modern Tool Usage)
+
+
+PO6 (Engineer &amp; Society)
+
+
+PO8 (Ethics)
+
+
+ PO9 (Individual &amp; Team Work)
+
+
+PO10 (Communication)
+
+
+PO11 (Project Management &amp; Finance)
+
+
+PO12 (Life-Long Learning)
+
+Department/Program Specific Outcomes (PSOs) Mapped to the Project
+
+PSO1: Applying artificial intelligence, speech processing, and natural language processing techniques to solve real-world problems related to interview analysis and communication skill assessment.
+
+PSO2: Designing and implementing an offline, privacy-preserving AI system that integrates pretrained models to analyze speech and text data for practical interview coaching applications.
+
+
+6. Project Categorization  
+
+
+Project Title
+
+Project Categorization
+
+AI-Based Interview Coach
+
+Research Based; Application Based
+
+
+The AI-Based Interview Coach falls under multiple categories. It is Research-based, as it involves experimenting with and analyzing different pretrained speech and NLP models, along with studying various audio and textual features to evaluate interview responses effectively. The project contributes to applied AI research by exploring explainable confidence estimation, speech fluency analysis, and semantic relevance assessment under offline (edge-AI) constraints. It is also Application-based, since the system can be deployed as an offline tool to assist students and job seekers in interview preparation by providing structured and actionable feedback.
+
+
+7. Project Map with SDG Goals 
+
+The AI-Based Interview Coach project aligns with the following Sustainable Development Goals (SDGs):
+
+• SDG 4: Quality Education – The system supports skill development and career readiness by enabling students and job seekers to practice interviews offline and receive structured feedback on communication, confidence, and response quality.
+
+• SDG 8: Decent Work and Economic Growth – By improving interview preparedness and communication skills, the project helps individuals enhance employability and access better job opportunities, contributing to inclusive economic growth.
+
+• SDG 9: Industry, Innovation, and Infrastructure – The project leverages edge-AI, speech processing, and NLP technologies to build an innovative, deployable interview coaching system that operates without cloud infrastructure.
+
+• SDG 12: Responsible Consumption and Production – The offline, edge-AI design reduces dependency on cloud resources, minimizes continuous data transmission, and promotes efficient and sustainable use of digital and computational resources.
+
+
+
+
+
+
+8. Conclusions 
+
+The AI-Based Interview Coach represents a practical application of artificial intelligence in improving communication and interview preparedness. Unlike traditional interview preparation methods that rely on human evaluators, online platforms, or generic feedback, this system leverages pretrained speech and NLP models to objectively analyze spoken interview responses and provide instant, structured feedback. By evaluating speech fluency, grammatical correctness, sentiment, answer relevance, and confidence indicators, the system supports candidates in identifying strengths and areas for improvement. Its fully offline, privacy-preserving design ensures accessibility for users in low-connectivity environments while eliminating concerns related to data storage and profiling. The project demonstrates how edge-AI systems can be effectively deployed for real-world skill development and personal coaching applications.
+
+Project Impact:
+
+Society: The system supports equitable access to interview preparation by enabling students and job seekers to practice interviews privately and offline. By reducing dependency on costly coaching services and internet connectivity, it helps bridge gaps in career readiness, particularly for individuals from underserved or low-connectivity regions.
+
+Academics &amp; Research: The project contributes to applied AI research by demonstrating the integration of pretrained speech and NLP models in an offline, edge-AI framework. It serves as a reference for system-level AI design, highlighting the use of explainable, rule-based confidence estimation alongside deep learning inference.
+
+Industry: Organizations and training institutes can adopt or extend the system for interview preparation, communication skill assessment, and soft-skill training. The privacy-preserving and offline nature of the system makes it suitable for controlled environments such as placement cells and internal training programs.
+
+Education &amp; Training: The project provides students with hands-on experience in speech processing, natural language processing, and AI system deployment. It illustrates how theoretical AI concepts can be translated into a practical, deployable application focused on real-world problem solving.
+
+
+9. Specific Contributions of Team Members
+
+
+Team Member
+
+Contribution
+
+Neha (2822633)
+
+
+Works on speech and NLP analysis modules, including grammar checking, sentiment analysis, and answer relevance evaluation using pretrained models.
+
+
+Designs and implements the rule-based confidence estimation logic using audio features such as pauses, speaking rate, and pitch variation.
+
+
+Assists in defining evaluation metrics for communication quality and supports testing and refinement of feedback generation.
+
+Kapil Saini (2822656)
+
+
+Develops the core backend system using Python (Flask/
+FastAPI
+) for integrating speech-to-text, audio processing, and NLP models.
+
+
+Implements the complete offline processing pipeline, ensuring no internet dependency and no user data storage.
+
+
+Handles system integration, deployment workflow, testing, and debugging for stable performance.
+
+Ronak (2822646)
+
+
+Designs and develops the frontend interface using HTML, CSS, and JavaScript.
+
+
+Builds an intuitive user interface to display transcripts, scores, and interview feedback.
+
+
+Ensures smooth interaction between frontend and backend for real-time or near real-time feedback presentation.
+
+
+
+
+
+
+
+
+
+
+
+
+10.  Key References 
+
+ 
+
+[1] Yoon, Su-Youn, et al. 2020. “Automated Interview Scoring Using Speech and Language Features.” IEEE Transactions on Affective Computing, 11(4): 1–14.
+
+[2] Chen, R., and M. Eskenazi. 2022. “Speech-Based Assessment of Communication Skills for Job Interviews.” Proceedings of 
+Interspeech
+ 2022, 3278–3282.
+
+[3] Radford, Alec, et al. 2023. “Robust Speech Recognition via Large-Scale Weak Supervision.” Proceedings of the 40th International Conference on Machine Learning (ICML).
+
+[4] Sanh, Victor, Lysandre Debut, Julien Chaumond, and Thomas Wolf. 2019. “
+DistilBERT
+: A Distilled Version of BERT: Smaller, Faster, Cheaper and Lighter.” Proceedings of the 5th Workshop on Energy-Efficient Machine Learning and Cognitive Computing (
+NeurIPS
+), 1–6.
+
+[5] Reimers, Nils, and Iryna Gurevych. 2019. “Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks.” Proceedings of EMNLP-IJCNLP, 3982–3992.
+
+[6] Malhotra, A., et al. 2023. “Explainable AI for Spoken Language Assessment.” IEEE Access, 11: 24567–24578.
+
+[7] Ribeiro, Marco Tulio, Sameer Singh, and Carlos Guestrin. 2016. “Why Should I Trust 
+You
+? Explaining the Predictions of Any Classifier.” Proceedings of the 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining, 1135–1144.
+
+[8] Verma, S., and P. Gupta. 2024. “Edge AI for Speech and Natural Language Processing Applications.” ACM Computing Surveys, 56(3): 1–36.
+
+[9] “Whisper: Open-Source Speech-to-Text Models.” GitHub Repository. Accessed August 2025. https://github.com/openai/whisper
+
+[10] “Hugging Face Transformers Library.” Hugging Face. Accessed August 2025.https://huggingface.co/transformers/
+
+
+
